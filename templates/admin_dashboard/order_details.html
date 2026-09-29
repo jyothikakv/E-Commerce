@@ -1,0 +1,216 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Order Details{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>Order {{ order.uuid }}</h2>
+        <p class="text-muted">
+            Order placed on {{ order.created_at|date:"d-m-Y H:i" }}
+        </p>
+    </div>
+
+    <a href="{% url 'admin_orders' %}"
+       class="btn btn-secondary">
+        ← Back to Orders
+    </a>
+
+</div>
+
+
+<!-- Customer Details -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h4>Customer Details</h4>
+
+        <hr>
+
+        <p>
+            <strong>Name:</strong>
+            {{ order.full_name }}
+        </p>
+
+        <p>
+            <strong>Phone:</strong>
+            {{ order.phone }}
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- Delivery Address -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h4>Delivery Address</h4>
+
+        <hr>
+
+        <p>
+            {{ order.address }}
+        </p>
+
+        <p>
+            {{ order.city }},
+            {{ order.state }}
+        </p>
+
+        <p>
+            <strong>Pincode:</strong>
+            {{ order.pincode }}
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- Ordered Products -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h4>Ordered Products</h4>
+
+        <hr>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Size</th>
+                        <th>Color</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for item in order.items.all %}
+
+                    <tr>
+
+                        <td>
+                            {{ item.product.name }}
+                        </td>
+
+                        <td>
+                            {% if item.variant %}
+                                {% firstof item.selected_size item.variant.size %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if item.variant %}
+                                {{ item.variant.color }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ item.quantity }}
+                        </td>
+
+                        <td>
+                            ₹{{ item.price }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5"
+                            class="text-center">
+                            No products in this order.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <h4>Order Summary</h4>
+
+        <hr>
+
+        <p>
+            <strong>Total Amount:</strong>
+            ₹{{ order.total_amount }}
+        </p>
+
+
+        <form method="POST"
+              action="{% url 'update_order_status' order.uuid %}">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    <strong>Order Status</strong>
+                </label>
+
+                <select name="status"
+                        class="form-select">
+
+                    {% for value, label in order.STATUS_CHOICES %}
+
+                        <option value="{{ value }}"
+                            {% if order.status == value %}
+                                selected
+                            {% endif %}>
+                            {{ label }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Update Status
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

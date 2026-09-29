@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+
+<h2 class="mb-4">Add Product</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Product Name
+        </label>
+
+        <input type="text"
+               name="name"
+               class="form-control"
+               placeholder="Enter product name"
+               required>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Category
+        </label>
+
+        <input type="text"
+               name="category"
+               class="form-control"
+               placeholder="Enter category"
+               required>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Description
+        </label>
+
+        <textarea name="description"
+                  class="form-control"
+                  rows="4"
+                  placeholder="Enter product description"
+                  required></textarea>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Fabric
+        </label>
+
+        <input type="text"
+               name="fabric"
+               class="form-control"
+               placeholder="Enter fabric type">
+
+    </div>
+
+
+    <hr>
+
+    <h4 class="mb-3">
+        Product Variant
+    </h4>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Color
+        </label>
+
+        <input type="text"
+               name="color"
+               class="form-control"
+               placeholder="Example: Red"
+               required>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Size
+        </label>
+
+        <input type="text"
+               name="size"
+               class="form-control"
+               placeholder="Example: M"
+               required>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Price
+        </label>
+
+        <input type="number"
+               name="price"
+               class="form-control"
+               placeholder="Enter price"
+               step="0.01"
+               required>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Stock
+        </label>
+
+        <input type="number"
+               name="stock"
+               class="form-control"
+               placeholder="Enter stock quantity"
+               min="0"
+               required>
+
+    </div>
+
+
+    
+    <div class="mb-3">
+
+        <label class="form-label">
+            Product Images
+        </label>
+
+        <input type="file"
+               name="images"
+               class="form-control"
+               accept="image/*"
+               multiple>
+
+        <small class="text-muted">
+            Select multiple images such as Front, Back and Side view.
+        </small>
+
+    </div>
+
+
+    
+    <button type="submit"
+            class="btn btn-primary">
+
+        Add Product
+
+    </button>
+
+</form>
+
+
+</div>
+
+{% endblock %}

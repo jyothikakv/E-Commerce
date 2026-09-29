@@ -1,0 +1,38 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Edit Product{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">Edit Product</h2>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-primary">
+                    Update Product
+                </button>
+
+                <a href="{% url 'admin_products' %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

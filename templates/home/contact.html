@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Contact - VASTRAM
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.contact-page {
+    padding: 60px 8%;
+    background: #fff;
+}
+
+/* =========================
+   CONTACT HEADING
+========================= */
+
+.contact-heading {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.contact-heading h1 {
+    font-size: 36px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.contact-heading p {
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.contact-container {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    gap: 80px;
+    align-items: flex-start;
+}
+
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.contact-info {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.contact-info h2,
+.contact-form h2 {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+.contact-intro {
+    color: #777;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+
+/* Contact Items */
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.contact-item i {
+    font-size: 18px;
+    width: 22px;
+    margin-top: 3px;
+}
+
+.contact-item strong {
+    font-size: 15px;
+}
+
+.contact-item p {
+    margin: 7px 0 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.contact-form {
+    flex: 1;
+    padding-left: 30px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #888;
+}
+
+.contact-form textarea {
+    height: 140px;
+    resize: vertical;
+}
+
+
+/* Send Button */
+
+.contact-form button {
+    background: #222;
+    color: white;
+    border: none;
+    padding: 13px 30px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    font-size: 13px;
+}
+
+.contact-form button:hover {
+    background: #555;
+}
+
+
+/* =========================
+   SUCCESS MESSAGE
+========================= */
+
+.success-message {
+    max-width: 1100px;
+    margin: 0 auto 25px;
+    padding: 15px;
+    background: #f3f3f3;
+    text-align: center;
+    color: #333;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .contact-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .contact-info,
+    .contact-form {
+        width: 100%;
+        padding: 0;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================
+     CONTACT PAGE
+========================= -->
+
+<div class="contact-page">
+
+
+    <!-- PAGE HEADING -->
+
+    <div class="contact-heading">
+
+        <h1>CONTACT US</h1>
+
+        <p>We are here to help you.</p>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    {% if success %}
+
+    <div class="success-message">
+        {{ success }}
+    </div>
+
+    {% endif %}
+
+
+    <!-- TWO COLUMN SECTION -->
+
+    <div class="contact-container">
+
+
+        <!-- =========================
+             LEFT : CONTACT INFORMATION
+        ========================== -->
+
+        <div class="contact-info">
+
+            <h2>Get In Touch</h2>
+
+            <p class="contact-intro">
+                Have a question about our collection, orders, or delivery?
+                We're happy to help.
+            </p>
+
+
+            <!-- Address -->
+
+            <div class="contact-item">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <div>
+
+                    <strong>Address</strong>
+
+                    <p>
+                        VASTRAM, India
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="contact-item">
+
+                <i class="fa-solid fa-phone"></i>
+
+                <div>
+
+                    <strong>Phone</strong>
+
+                    <p>
+                        +91 XXXXX XXXXX
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="contact-item">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <div>
+
+                    <strong>Email</strong>
+
+                    <p>
+                        vastram@example.com
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Working Hours -->
+
+            <div class="contact-item">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <div>
+
+                    <strong>Working Hours</strong>
+
+                    <p>
+                        Monday - Saturday<br>
+                        10:00 AM - 6:00 PM
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             RIGHT : CONTACT FORM
+        ========================== -->
+
+        <div class="contact-form">
+
+            <h2>Send Us a Message</h2>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- Name -->
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    required
+                >
+
+
+                <!-- Email -->
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    required
+                >
+
+
+                <!-- Subject -->
+
+                <input
+                    type="text"
+                    name="subject"
+                    placeholder="Subject"
+                    required
+                >
+
+
+                <!-- Message -->
+
+                <textarea
+                    name="message"
+                    placeholder="Your Message"
+                    required
+                ></textarea>
+
+
+                <!-- Submit -->
+
+                <button type="submit">
+                    SEND MESSAGE
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

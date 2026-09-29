@@ -1,0 +1,38 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">Edit Category</h2>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-primary">
+                    Update Category
+                </button>
+
+                <a href="{% url 'admin_categories' %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

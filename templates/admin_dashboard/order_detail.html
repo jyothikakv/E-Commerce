@@ -1,0 +1,180 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}
+Order {{ order.uuid }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        Order {{ order.uuid }}
+    </h2>
+
+    <div class="card p-4 mb-4">
+
+        <h4>Customer Details</h4>
+
+        <p>
+            <strong>Name:</strong>
+            {{ order.full_name }}
+        </p>
+
+        <p>
+            <strong>Phone:</strong>
+            {{ order.phone }}
+        </p>
+
+        <p>
+            <strong>Address:</strong><br>
+            {{ order.address }}<br>
+            {{ order.city }}, {{ order.state }} - {{ order.pincode }}
+        </p>
+
+    </div>
+
+
+    <div class="card p-4 mb-4">
+
+        <h4>Order Details</h4>
+
+        <p>
+            <strong>Order ID:</strong>
+            {{ order.uuid }}
+        </p>
+
+        <p>
+            <strong>Date:</strong>
+            {{ order.created_at|date:"d M Y, h:i A" }}
+        </p>
+
+        <p>
+            <strong>Total Amount:</strong>
+            ₹{{ order.total_amount }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ order.status }}
+        </p>
+
+    </div>
+
+
+    <div class="card p-4 mb-4">
+
+        <h4>Ordered Products</h4>
+
+        {% for item in order.items.all %}
+
+        <div class="border-bottom py-3">
+
+            <p>
+                <strong>Product:</strong>
+                {{ item.product.name }}
+            </p>
+
+            {% if item.variant %}
+            <p>
+                <strong>Size:</strong> {% firstof item.selected_size item.variant.size %}
+                <br>
+                <strong>Color:</strong> {{ item.variant.color }}
+            </p>
+            {% endif %}
+
+            <p>
+                <strong>Quantity:</strong>
+                {{ item.quantity }}
+            </p>
+
+            <p>
+                <strong>Price:</strong>
+                ₹{{ item.price }}
+            </p>
+
+        </div>
+
+        {% empty %}
+
+        <p>No products found for this order.</p>
+
+        {% endfor %}
+
+    </div>
+
+    {% if order.return_request %}
+    <div class="card p-4 mb-4">
+        <h4>Return / Exchange Request</h4>
+        <p><strong>Requested remedy:</strong> {{ order.return_request.get_requested_remedy_display }}</p>
+        <p><strong>Reason:</strong><br>{{ order.return_request.reason|linebreaksbr }}</p>
+        <p><strong>Current status:</strong> {{ order.return_request.get_status_display }}</p>
+        {% if order.return_request.resolution %}
+        <p><strong>Resolution:</strong> {{ order.return_request.get_resolution_display }}</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'update_return_request' order.uuid %}">
+            {% csrf_token %}
+            <label for="return-status" class="form-label">Request status</label>
+            <select id="return-status" name="status" class="form-select mb-3" required>
+                {% for value, label in order.return_request.STATUS_CHOICES %}
+                <option value="{{ value }}" {% if order.return_request.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="return-resolution" class="form-label">Resolution</label>
+            <select id="return-resolution" name="resolution" class="form-select mb-3">
+                <option value="">Not decided</option>
+                {% for value, label in order.return_request.RESOLUTION_CHOICES %}
+                <option value="{{ value }}" {% if order.return_request.resolution == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="return-admin-note" class="form-label">Message for customer</label>
+            <textarea id="return-admin-note" name="admin_note" class="form-control mb-3" rows="3">{{ order.return_request.admin_note }}</textarea>
+            {% if order.return_request.status != 'completed' %}
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="restock_returned_items" id="restock-returned-items">
+                <label class="form-check-label" for="restock-returned-items">Returned items received and inspected; restore them to stock</label>
+            </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">UPDATE REQUEST</button>
+        </form>
+        <p class="text-muted mt-3 mb-0">Approving or completing a request records the decision; issue the exchange or refund through your payment/fulfilment provider separately.</p>
+    </div>
+    {% endif %}
+
+
+    <div class="card p-4">
+
+        <h4>Update Order Status</h4>
+
+        <form method="POST"
+              action="{% url 'update_order_status' order.uuid %}">
+
+            {% csrf_token %}
+
+            <select name="status" class="form-select mb-3">
+
+                {% for value, label in order.STATUS_CHOICES %}
+
+                <option value="{{ value }}"
+                    {% if order.status == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <button type="submit" class="btn btn-primary">
+                UPDATE STATUS
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

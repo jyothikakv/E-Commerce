@@ -1,0 +1,176 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}
+Add Product
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Add Product</h2>
+
+    <form method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <!-- PRODUCT DETAILS -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Product Details</h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+
+    {{ product_form.name.label_tag }}
+    {{ product_form.name }}
+
+</div>
+
+
+<div class="mb-3">
+
+    {{ product_form.category.label_tag }}
+    {{ product_form.category }}
+
+    <datalist id="category-list">
+
+        {% for category in product_form.category_choices %}
+
+            <option value="{{ category.name }}">
+
+        {% endfor %}
+
+    </datalist>
+
+</div>
+
+
+<div class="mb-3">
+
+    {{ product_form.description.label_tag }}
+    {{ product_form.description }}
+
+</div>
+
+
+<div class="mb-3">
+
+    {{ product_form.fabric.label_tag }}
+    {{ product_form.fabric }}
+
+</div>
+
+            </div>
+        </div>
+
+
+        <!-- VARIANT DETAILS -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Variant Details</h5>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Color -->
+                <div class="mb-3">
+                    <label class="form-label">Color</label>
+
+                    <input type="text"
+                           name="color"
+                           class="form-control"
+                           placeholder="Example: Red"
+                           required>
+                </div>
+
+
+                <!-- Size -->
+                <div class="mb-3">
+                    <label class="form-label">Size</label>
+
+                    <input type="text"
+                           name="size"
+                           class="form-control"
+                           placeholder="Example: M"
+                           required>
+                </div>
+
+
+                <!-- Price -->
+                <div class="mb-3">
+                    <label class="form-label">Price</label>
+
+                    <input type="number"
+                           name="price"
+                           class="form-control"
+                           placeholder="Enter price"
+                           step="0.01"
+                           min="0"
+                           required>
+                </div>
+
+
+                <!-- Stock -->
+                <div class="mb-3">
+                    <label class="form-label">Stock</label>
+
+                    <input type="number"
+                           name="stock"
+                           class="form-control"
+                           placeholder="Enter stock quantity"
+                           min="0"
+                           required>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- PRODUCT IMAGES -->
+        <div class="card mb-4">
+
+            <div class="card-header">
+                <h5>Product Images</h5>
+            </div>
+
+            <div class="card-body">
+
+                <label class="form-label">
+                    Select Product Images
+                </label>
+
+                <input type="file"
+                       name="images"
+                       class="form-control"
+                       accept="image/*"
+                       multiple
+                       required>
+
+                <small class="text-muted">
+                    You can select multiple images such as Front, Back and Side views.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+        <button type="submit"
+                class="btn btn-primary">
+            Add Product
+        </button>
+
+        <a href="{% url 'admin_products' %}"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

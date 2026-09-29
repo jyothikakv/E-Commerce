@@ -1,0 +1,103 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Manage Categories{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>Manage Categories</h2>
+        <p class="text-muted">
+            {{ top_level_count }} main categories · {{ collection_count }} collections
+        </p>
+    </div>
+
+    <a href="{% url 'add_category' %}" class="btn btn-success">
+            + Add Category
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        {% include 'admin_dashboard/includes/table_controls.html' %}
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover admin-searchable-table">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Category / Collection</th>
+                        <th>Parent category</th>
+                        <th>Collections</th>
+                        <th>Products</th>
+                        <th>Description</th>
+                        <th data-no-sort="true">Actions</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for category in categories %}
+
+                    <tr>
+
+                        <td>{{ category.id }}</td>
+
+                        <td>
+                            {% if category.parent %}<span class="text-muted">↳</span>{% endif %}
+                            <strong>{{ category.name }}</strong>
+                            <small class="d-block text-muted">{% if category.parent %}Collection{% else %}Main category{% endif %}</small>
+                        </td>
+
+                        <td>{{ category.parent.name|default:'—' }}</td>
+
+                        <td>{{ category.collection_count }}</td>
+
+                        <td>{{ category.product_count }}</td>
+
+                        <td>{{ category.description }}</td>
+
+                        <td>
+                            <a href="{% url 'edit_category' category.id %}"
+                                     class="btn btn-sm btn-warning">
+                                 Edit
+                            </a>
+                            <a href="{% url 'delete_category' category.id %}"
+                                     class="btn btn-sm btn-danger">
+                                 Delete
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            No categories available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+        {% include 'admin_dashboard/includes/table_pagination.html' %}
+
+    </div>
+
+</div>
+
+{% endblock %}

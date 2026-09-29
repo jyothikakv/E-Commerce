@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Order {{ order.uuid }} - VASTRAM{% endblock %}
+
+{% block content %}
+<main class="order-detail-page">
+    <a class="back-link" href="{% url 'order_list' %}">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> My orders
+    </a>
+
+    <header class="order-header">
+        <div>
+            <p class="eyebrow">ORDER TRACKING</p>
+            <h1>Order details</h1>
+            <p class="order-reference">{{ order.uuid }}</p>
+        </div>
+        <div class="status-summary">
+            <span class="status-label">Current status</span>
+            <strong class="status-pill status-{{ order.status|lower }}">{{ order.get_status_display }}</strong>
+            <span class="placed-date">Placed {{ order.created_at|date:"d M Y, h:i A" }}</span>
+        </div>
+    </header>
+
+    {% if order.status == 'Cancelled' %}
+        <section class="cancelled-notice" aria-live="polite">
+            <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+            <div>
+                <h2>Order cancelled</h2>
+                <p>This order will not be shipped. Contact our support team if you need help.</p>
+            </div>
+        </section>
+    {% else %}
+        <section class="tracking-section" aria-label="Order progress">
+            <div class="tracking-heading">
+                <h2>Delivery progress</h2>
+                <span>{{ order.get_status_display }}</span>
+            </div>
+            <ol class="tracking-steps">
+                {% for step_status, step_label in tracking_steps %}
+                <li class="tracking-step{% if forloop.counter0 < current_status_position %} is-complete{% elif forloop.counter0 == current_status_position %} is-current{% endif %}">
+                    <span class="step-marker">
+                        {% if forloop.counter0 < current_status_position %}
+                            <i class="fa-solid fa-check" aria-hidden="true"></i>
+                        {% else %}
+                            {{ forloop.counter }}
+                        {% endif %}
+                    </span>
+                    <span class="step-label">{{ step_label }}</span>
+                </li>
+                {% endfor %}
+            </ol>
+            {% if order.status == 'Pending' %}
+                <p class="tracking-note">We’ve received your order and it’s waiting for confirmation.</p>
+            {% elif order.status == 'Confirmed' %}
+                <p class="tracking-note">Your order is confirmed and being prepared for shipment.</p>
+            {% elif order.status == 'Shipped' %}
+                <p class="tracking-note">Your order has shipped. The status will update when it is delivered.</p>
+            {% elif order.status == 'Delivered' %}
+                <p class="tracking-note">Your order has been delivered. We hope you love it.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    {% if return_request %}
+        <section class="return-request-panel" aria-live="polite">
+            <div class="return-request-heading">
+                <div>
+                    <p class="eyebrow">RETURN / EXCHANGE</p>
+                    <h2>Request {{ return_request.get_requested_remedy_display }}</h2>
+                </div>
+                <span class="return-status return-status-{{ return_request.status }}">
+                    {{ return_request.get_status_display }}
+                </span>
+            </div>
+            <p><strong>Your reason:</strong> {{ return_request.reason }}</p>
+            {% if return_request.resolution %}
+                <p><strong>Decision:</strong> {{ return_request.get_resolution_display }}</p>
+            {% endif %}
+            {% if return_request.admin_note %}
+                <p><strong>Store update:</strong> {{ return_request.admin_note }}</p>
+            {% endif %}
+        </section>
+    {% elif order.status == 'Delivered' %}
+        <section class="return-request-panel">
+            <p class="eyebrow">NEED A DIFFERENT SOLUTION?</p>
+            <h2>Request a return or exchange</h2>
+            <p class="return-request-copy">Submit your request and our team will review it.</p>
+            {% if return_error %}<p class="return-error" role="alert">{{ return_error }}</p>{% endif %}
+            <form method="post" action="{% url 'submit_return_request' order.uuid %}" class="return-request-form">
+                {% csrf_token %}
+                <label for="requested-remedy">Preferred resolution</label>
+                <select id="requested-remedy" name="requested_remedy" required>
+                    <option value="">Choose one</option>
+                    <option value="exchange">Exchange product</option>
+                    <option value="refund">Refund money</option>
+                </select>
+                <label for="return-reason">Reason for request</label>
+                <textarea id="return-reason" name="reason" rows="3" maxlength="1000" required></textarea>
+                <button type="submit">Submit request</button>
+            </form>
+        </section>
+    {% endif %}
+
+    <div class="order-content-grid">
+        <section class="ordered-items">
+            <h2>Items in this order <span>{{ order.items.count }}</span></h2>
+            {% for item in order.items.all %}
+            <article class="ordered-item">
+                <div class="item-image">
+                    {% if item.variant and item.variant.images.first %}
+                        <img src="{{ item.variant.images.first.image.url }}" alt="{{ item.product.name }}">
+                    {% elif item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                    {% else %}
+                        <span>No image</span>
+                    {% endif %}
+                </div>
+                <div class="item-details">
+                    <p class="item-category">{{ item.product.category.name }}</p>
+                    <h3>{{ item.product.name }}</h3>
+                    {% if item.variant.color %}<p>Color: {{ item.variant.color }}</p>{% endif %}
+                    {% if item.selected_size or item.variant.size %}<p>Size: {% firstof item.selected_size item.variant.size %}</p>{% endif %}
+                    <p>Quantity: {{ item.quantity }}</p>
+                </div>
+                <strong class="item-price">₹{{ item.price }}</strong>
+            </article>
+            {% endfor %}
+            <div class="order-total"><span>Order total</span><strong>₹{{ order.total_amount }}</strong></div>
+        </section>
+
+        <aside class="delivery-card">
+            <p class="eyebrow">DELIVERING TO</p>
+            <h2>{{ order.full_name }}</h2>
+            <p>{{ order.address }}</p>
+            <p>{{ order.city }}, {{ order.state }} {{ order.pincode }}</p>
+            <p class="delivery-phone">{{ order.phone }}</p>
+        </aside>
+    </div>
+</main>
+
+<style>
+    .order-detail-page { max-width: 1120px; margin: 0 auto; padding: 38px 28px 72px; }
+    .back-link { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 26px; color: #6e6260; font-size: 13px; text-decoration: none; }
+    .back-link:hover { color: #9b3438; }
+    .order-header { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid #e8e2df; }
+    .eyebrow { margin: 0 0 8px; color: #9b3438; font-size: 10px; font-weight: 700; letter-spacing: 1.8px; }
+    .order-header h1 { margin: 0; font-size: 32px; font-weight: 500; }
+    .order-reference { margin: 10px 0 0; color: #716b68; font-size: 12px; overflow-wrap: anywhere; }
+    .status-summary { display: grid; justify-items: end; gap: 6px; }
+    .status-label, .placed-date { color: #77716e; font-size: 12px; }
+    .status-pill { padding: 7px 12px; background: #f4ebe7; color: #8c3739; font-size: 12px; }
+    .status-delivered { background: #eaf2ec; color: #376348; }
+    .status-cancelled { background: #f8e9e8; color: #9b3438; }
+    .tracking-section { margin: 24px 0 30px; padding: 22px 24px; border: 1px solid #e8e2df; }
+    .tracking-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tracking-heading h2, .ordered-items h2 { margin: 0; font-size: 19px; font-weight: 500; }
+    .tracking-heading span { color: #9b3438; font-size: 13px; font-weight: 700; }
+    .tracking-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 26px 0 12px; padding: 0; list-style: none; }
+    .tracking-step { position: relative; display: grid; justify-items: center; gap: 9px; color: #938d89; text-align: center; }
+    .tracking-step:not(:last-child)::after { position: absolute; top: 15px; left: calc(50% + 17px); width: calc(100% - 34px); height: 2px; background: #ded8d4; content: ''; }
+    .tracking-step.is-complete:not(:last-child)::after { background: #9b3438; }
+    .step-marker { z-index: 1; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #d8d1cd; border-radius: 50%; background: #fff; font-size: 12px; }
+    .tracking-step.is-complete .step-marker, .tracking-step.is-current .step-marker { border-color: #9b3438; background: #9b3438; color: #fff; }
+    .tracking-step.is-current .step-marker { box-shadow: 0 0 0 4px rgba(155,52,56,.13); }
+    .step-label { font-size: 12px; }
+    .tracking-step.is-complete .step-label, .tracking-step.is-current .step-label { color: #332d2b; font-weight: 600; }
+    .tracking-note { margin: 20px 0 0; color: #6e6763; font-size: 13px; }
+    .return-request-panel { margin: 24px 0 30px; padding: 20px 22px; border: 1px solid #e8e2df; }
+    .return-request-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .return-request-panel h2 { margin: 0 0 8px; font-size: 18px; font-weight: 500; }
+    .return-request-panel p:not(.eyebrow) { color: #625c58; font-size: 13px; line-height: 1.55; }
+    .return-request-copy { margin: 0 0 16px; }
+    .return-status { padding: 7px 11px; background: #f4ebe7; color: #8c3739; font-size: 12px; font-weight: 600; }
+    .return-status-approved, .return-status-completed { background: #eaf2ec; color: #376348; }
+    .return-status-rejected { background: #f8e9e8; color: #9b3438; }
+    .return-request-form { display: grid; gap: 8px; max-width: 540px; }
+    .return-request-form label { margin-top: 6px; font-size: 12px; font-weight: 600; }
+    .return-request-form select, .return-request-form textarea { width: 100%; padding: 10px; border: 1px solid #d8d1cd; background: #fff; font: inherit; font-size: 13px; }
+    .return-request-form button { justify-self: start; margin-top: 6px; padding: 11px 16px; border: 0; background: #332d2b; color: #fff; font-size: 12px; cursor: pointer; }
+    .return-error { color: #9b3438 !important; }
+    .cancelled-notice { display: flex; align-items: flex-start; gap: 14px; margin: 24px 0 30px; padding: 20px; background: #fbefee; color: #8c3034; }
+    .cancelled-notice > i { margin-top: 3px; font-size: 19px; }
+    .cancelled-notice h2 { margin: 0 0 6px; font-size: 17px; }
+    .cancelled-notice p { margin: 0; font-size: 13px; line-height: 1.5; }
+    .order-content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: start; }
+    .ordered-items h2 { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .ordered-items h2 span { color: #8b817c; font-size: 12px; }
+    .ordered-item { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #eee9e6; }
+    .item-image { display: grid; place-items: center; width: 88px; height: 104px; overflow: hidden; background: #f6f3f1; color: #999; font-size: 11px; }
+    .item-image img { width: 100%; height: 100%; object-fit: cover; }
+    .item-category { margin: 0 0 5px; color: #8b817c; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+    .item-details h3 { margin: 0 0 7px; font-size: 15px; font-weight: 600; }
+    .item-details p:not(.item-category) { margin: 4px 0; color: #6f6965; font-size: 12px; }
+    .item-price { align-self: start; padding-top: 3px; font-size: 14px; white-space: nowrap; }
+    .order-total { display: flex; justify-content: space-between; padding-top: 18px; font-size: 14px; }
+    .order-total strong { font-size: 17px; }
+    .delivery-card { padding: 20px; border: 1px solid #e8e2df; }
+    .delivery-card h2 { margin: 0 0 12px; font-size: 16px; font-weight: 600; }
+    .delivery-card p:not(.eyebrow) { margin: 6px 0; color: #625c58; font-size: 13px; line-height: 1.55; }
+    .delivery-phone { padding-top: 10px; border-top: 1px solid #eee9e6; }
+    @media (max-width: 760px) {
+        .order-detail-page { padding: 26px 16px 52px; }
+        .order-header { align-items: flex-start; flex-direction: column; }
+        .status-summary { justify-items: start; }
+        .order-content-grid { grid-template-columns: 1fr; }
+        .tracking-section { padding: 18px 14px; }
+        .return-request-panel { padding: 17px; }
+        .return-request-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+        .step-label { font-size: 10px; }
+        .tracking-step:not(:last-child)::after { left: calc(50% + 15px); width: calc(100% - 30px); }
+    }
+    @media (max-width: 430px) {
+        .ordered-item { grid-template-columns: 68px minmax(0, 1fr); gap: 12px; }
+        .item-image { width: 68px; height: 86px; }
+        .item-price { grid-column: 2; padding-top: 0; }
+        .step-label { font-size: 9px; }
+    }
+</style>
+{% endblock %}

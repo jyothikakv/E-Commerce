@@ -1,0 +1,1739 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Home - VASTRAM
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="launch-alert">
+
+    New Collection Has Arrived!
+
+</div>
+
+
+
+<section class="hero-carousel" aria-label="Featured collections" aria-roledescription="carousel">
+
+
+    <!-- SLIDE 1 -->
+
+    <div class="hero-slide hero-slide--portrait active" aria-hidden="false">
+
+        <img src="/media/home/hero.jpg"
+             alt="VASTRAM Collection">
+
+        <div class="banner-content">
+
+            <span class="banner-eyebrow">THE VASTRAM EDIT</span>
+            <h1>
+                VASTRAM
+            </h1>
+
+            <p>
+                Timeless traditional elegance
+            </p>
+
+            <a href="{% url 'product_list' %}"
+               class="hero-btn">
+
+                SHOP COLLECTION
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SLIDE 2 -->
+
+    <div class="hero-slide" aria-hidden="true">
+
+        <img src="/media/home/hero2.jpg"
+             alt="New Collection">
+
+        <div class="banner-content">
+
+            <span class="banner-eyebrow">JUST ARRIVED</span>
+            <h1>
+                NEW COLLECTION
+            </h1>
+
+            <p>
+                Discover our latest styles
+            </p>
+
+            <a href="{% url 'product_list' %}"
+               class="hero-btn">
+
+                SHOP NOW
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SLIDE 3 -->
+
+    <div class="hero-slide" aria-hidden="true">
+
+        <img src="/media/home/hero3.jpg"
+             alt="Timeless Elegance">
+
+        <div class="banner-content">
+
+            <span class="banner-eyebrow">MADE FOR YOUR MOMENTS</span>
+            <h1>
+                TIMELESS ELEGANCE
+            </h1>
+
+            <p>
+                Designed to make every moment special
+            </p>
+
+            <a href="{% url 'product_list' %}"
+               class="hero-btn">
+
+                EXPLORE
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SLIDE 4 -->
+
+    <div class="hero-slide" aria-hidden="true">
+
+        <img src="/media/home/hero4.jpg"
+             alt="Festive Collection">
+
+        <div class="banner-content">
+
+            <span class="banner-eyebrow">THE CELEBRATION EDIT</span>
+            <h1>
+                FESTIVE EDIT
+            </h1>
+
+            <p>
+                Celebrate in beautiful traditional styles
+            </p>
+
+            <a href="{% url 'product_list' %}"
+               class="hero-btn">
+
+                SHOP NOW
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREVIOUS BUTTON -->
+
+    <button type="button" class="hero-prev" aria-label="Previous slide" data-slide-prev>
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+
+    </button>
+
+
+    <!-- NEXT BUTTON -->
+
+    <button type="button" class="hero-next" aria-label="Next slide" data-slide-next>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+
+    </button>
+
+
+    <!-- DOTS -->
+
+    <div class="hero-controls">
+        <div class="hero-dots" role="group" aria-label="Choose a slide">
+
+            <button type="button" class="dot active-dot" aria-label="Show slide 1" aria-pressed="true" data-slide-to="0"></button>
+
+            <button type="button" class="dot" aria-label="Show slide 2" aria-pressed="false" data-slide-to="1"></button>
+
+            <button type="button" class="dot" aria-label="Show slide 3" aria-pressed="false" data-slide-to="2"></button>
+
+            <button type="button" class="dot" aria-label="Show slide 4" aria-pressed="false" data-slide-to="3"></button>
+
+        </div>
+        <button type="button" class="hero-autoplay" aria-label="Pause slideshow" data-slide-toggle>
+            <i class="fa-solid fa-pause" aria-hidden="true"></i>
+        </button>
+    </div>
+
+
+</section>
+
+
+<!-- =========================
+     BRIDAL COLLECTION
+========================= -->
+
+<section class="bridal-section">
+
+
+    <div class="section-heading">
+
+        <p>
+            CELEBRATE YOUR SPECIAL DAY
+        </p>
+
+        <h2>
+            Bridal Collection
+        </h2>
+
+        <span>
+            Elegant bridal styles for every tradition
+        </span>
+
+    </div>
+
+
+    <div class="bridal-grid">
+
+
+        <!-- HINDU BRIDAL -->
+
+        <a href="{% url 'product_list' %}?category=Hindu%20Bridal"
+           class="bridal-card">
+
+
+            <div class="bridal-image">
+
+                <img src="/media/products/hindu_bridal_2.jpg"
+                        alt="Hindu Bridal">
+
+            </div>
+
+
+            <div class="bridal-info">
+
+                <h3>
+                    Hindu Bridal
+                </h3>
+
+                <p>
+                    Traditional bridal elegance
+                </p>
+
+                <span>
+                    SHOP NOW →
+                </span>
+
+            </div>
+
+
+        </a>
+
+
+        <!-- CHRISTIAN BRIDAL -->
+
+        <a href="{% url 'product_list' %}?category=Christian%20Bridal"
+           class="bridal-card">
+
+
+            <div class="bridal-image">
+
+                <img src="{% static 'images/christian_bridal_gown.jpg' %}"
+                        alt="Christian Bridal">
+
+            </div>
+
+
+            <div class="bridal-info">
+
+                <h3>
+                    Christian Bridal
+                </h3>
+
+                <p>
+                    Elegant styles for your special day
+                </p>
+
+                <span>
+                    SHOP NOW →
+                </span>
+
+            </div>
+
+
+        </a>
+
+
+        <!-- MUSLIM BRIDAL -->
+
+        <a href="{% url 'product_list' %}?category=Muslim%20Bridal"
+           class="bridal-card">
+
+
+            <div class="bridal-image">
+
+                <!-- MUSLIM BRIDAL -->
+
+                    <img src="{% static 'images/muslim_bridal_anarkali copy.jpg' %}"
+                        alt="Muslim Bridal">
+
+            </div>
+
+
+            <div class="bridal-info">
+
+                <h3>
+                    Muslim Bridal
+                </h3>
+
+                <p>
+                    Graceful and timeless bridal wear
+                </p>
+
+                <span>
+                    SHOP NOW →
+                </span>
+
+            </div>
+
+
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================
+     COLLECTION
+========================= -->
+
+<section class="collections-section">
+
+
+    <div class="section-heading">
+
+        <p>
+            EXPLORE VASTRAM
+        </p>
+
+        <h2>
+            Collection
+        </h2>
+
+        <span>
+            Discover styles made for every occasion
+        </span>
+
+    </div>
+
+
+    <div class="collection-grid">
+
+
+        <!-- SAREES -->
+
+        <a href="{% url 'product_list' %}?category=Saree"
+           class="collection-card">
+
+
+            <div class="collection-image">
+
+                <img src="/media/products/kanchipuramsaree2.jpg"
+                     alt="Sarees">
+
+            </div>
+
+
+            <h3>
+                Sarees
+            </h3>
+
+            <p>
+                Elegant traditional styles
+            </p>
+
+
+        </a>
+
+
+        <!-- KURTIS -->
+
+        <a href="{% url 'product_list' %}?category=Kurtis"
+           class="collection-card">
+
+
+            <div class="collection-image">
+
+                <img src="{% static 'images/kurti4.webp' %}"
+                     alt="Kurtis">
+
+            </div>
+
+
+            <h3>
+                Kurtis
+            </h3>
+
+            <p>
+                Comfort with elegance
+            </p>
+
+
+        </a>
+
+
+        <!-- ANARKALI -->
+
+        <a href="{% url 'product_list' %}?category=Anarkali"
+           class="collection-card">
+
+
+            <div class="collection-image">
+
+                <img src="/media/products/anarkalii.webp"
+                     alt="Anarkali">
+
+            </div>
+
+
+            <h3>
+                Anarkali
+            </h3>
+
+            <p>
+                Graceful festive wear
+            </p>
+
+
+        </a>
+
+
+        <!-- PARTY WEAR -->
+
+        <a href="{% url 'product_list' %}?category=Party%20Wear"
+           class="collection-card">
+
+
+            <div class="collection-image">
+
+                <img src="/media/products/party4.jpg"
+                     alt="Party Wear">
+
+            </div>
+
+
+            <h3>
+                Party Wear
+            </h3>
+
+            <p>
+                Perfect styles for special occasions
+            </p>
+
+
+        </a>
+
+
+        <!-- SET MUNDU -->
+
+        <a href="{% url 'product_list' %}?category=Set%20Mundu"
+           class="collection-card">
+
+
+            <div class="collection-image">
+
+                <img src="/media/products/setu mundu4.jpg"
+                     alt="Set Mundu">
+
+            </div>
+
+
+            <h3>
+                Set Mundu
+            </h3>
+
+            <p>
+                Traditional Kerala elegance
+            </p>
+
+
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<section class="offers-section">
+
+    <div class="section-heading">
+
+        <p class="section-label">
+            DON'T MISS OUT
+        </p>
+
+        <h2>
+            Special Offers
+        </h2>
+
+        <p>
+            Exclusive styles at special prices
+        </p>
+
+    </div>
+
+
+    <div class="offers-grid">
+
+        {% for offer in offers %}
+
+        <a href="{% url 'product_detail' offer.variant.product.slug %}"
+           class="offer-card">
+
+            <div class="offer-image">
+
+                {% if offer.variant.images.first %}
+
+                    <img src="{{ offer.variant.images.first.image.url }}"
+                         alt="{{ offer.variant.product.name }}">
+
+                {% elif offer.variant.product.image %}
+
+                    <img src="{{ offer.variant.product.image.url }}"
+                         alt="{{ offer.variant.product.name }}">
+
+                {% endif %}
+
+
+                {% if offer.is_currently_active and offer.variant.product.name == "Kaveri Saree" %}
+
+                    <span class="offer-badge">
+                        20% OFF
+                    </span>
+
+                {% elif offer.is_currently_active and offer.variant.product.name == "Embroidered Kurti" %}
+
+                    <span class="offer-badge">
+                        15% OFF
+                    </span>
+
+                {% elif offer.is_currently_active and offer.variant.product.name == "Floor Length Anarkali" %}
+
+                    <span class="offer-badge">
+                        25% OFF
+                    </span>
+
+                {% elif offer.is_currently_active and offer.variant.product.name == "Designer Set Mundu" %}
+
+                    <span class="offer-badge">
+                        10% OFF
+                    </span>
+
+                {% endif %}
+
+                {% if not offer.is_currently_active %}
+                    <span class="offer-badge offer-ended-badge">OFFER ENDED</span>
+                {% endif %}
+
+            </div>
+
+
+            <div class="offer-info">
+
+                <h3>
+                    {{ offer.variant.product.name }}
+                </h3>
+
+                {% if offer.is_currently_active %}
+                    <p class="original-price">₹{{ offer.variant.price }}</p>
+                    <p class="offer-price">₹{{ offer.offer_price }}</p>
+                {% else %}
+                    <p class="offer-expired-price">₹{{ offer.variant.price }}</p>
+                    <span class="offer-expired-note">Current price</span>
+                {% endif %}
+
+                <span class="shop-offer">
+                    SHOP NOW →
+                </span>
+
+            </div>
+
+        </a>
+
+        {% empty %}
+
+            <p class="no-offers">
+                No special offers available.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+<style>
+
+
+
+section {
+
+    margin: 0;
+
+}
+
+
+.section-heading {
+
+    text-align: center;
+
+    margin-bottom: 45px;
+
+}
+
+
+.section-heading p {
+
+    font-size: 13px;
+
+    letter-spacing: 3px;
+
+    color: #777;
+
+    margin-bottom: 8px;
+
+}
+
+
+.section-heading h2 {
+
+    font-size: 34px;
+
+    margin: 0 0 10px;
+
+    font-weight: 600;
+
+}
+
+
+.section-heading span {
+
+    color: #777;
+
+    font-size: 15px;
+
+}
+
+
+
+.launch-alert {
+
+    text-align: center;
+
+    padding: 10px 16px;
+
+    background: #f6f2ec;
+
+    color: #67513b;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+}
+
+
+
+.hero-carousel {
+
+    position: relative;
+
+    width: 100%;
+
+    height: min(680px, 70svh);
+    min-height: 500px;
+
+    overflow: hidden;
+
+}
+
+
+.hero-slide {
+
+    display: none;
+
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    animation: fadeSlide 0.8s ease-in-out;
+
+}
+
+
+@keyframes fadeSlide {
+
+    from {
+        opacity: 0.4;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+.hero-slide.active {
+
+    display: block;
+
+}
+
+
+.hero-slide::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: linear-gradient(90deg, rgba(20, 31, 26, .76) 0%, rgba(20, 31, 26, .52) 34%, rgba(20, 31, 26, .08) 78%, rgba(20, 31, 26, .02) 100%);
+
+    z-index: 1;
+
+}
+
+
+.hero-slide img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    display: block;
+
+}
+
+.hero-slide--portrait img {
+    object-position: center 22%;
+}
+
+
+.banner-content {
+
+    position: absolute;
+
+    left: clamp(28px, 10vw, 150px);
+
+    bottom: clamp(80px, 16vh, 150px);
+
+    text-align: left;
+
+    color: white;
+
+    z-index: 2;
+
+    width: min(620px, 72%);
+
+}
+
+
+.banner-content h1 {
+
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(52px, 6vw, 88px);
+
+    letter-spacing: 0;
+
+    margin: 0 0 14px;
+    line-height: .95;
+
+    font-weight: 500;
+
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+
+}
+
+
+.banner-content p {
+
+    max-width: 430px;
+    font-size: 16px;
+
+    margin: 0 0 28px;
+    line-height: 1.6;
+
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+
+}
+
+
+.hero-btn {
+
+    display: inline-block;
+
+    padding: 14px 24px;
+
+    background: #e6d4af;
+
+    color: #332d2b;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    letter-spacing: 0;
+
+    font-weight: 600;
+
+    transition: background-color 0.2s, transform 0.2s;
+
+}
+
+
+.hero-btn:hover {
+
+    background: #fff;
+
+    color: #332d2b;
+
+    transform: translateY(-2px);
+
+}
+
+
+.hero-prev,
+.hero-next {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: 1px solid rgba(255,255,255,0.7);
+
+    background: rgba(20,20,20,0.24);
+
+    backdrop-filter: blur(6px);
+
+    color: white;
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-size: 20px;
+
+    z-index: 5;
+
+    transition: 0.3s;
+
+}
+
+
+.hero-prev {
+
+    left: 25px;
+
+}
+
+
+.hero-next {
+
+    right: 25px;
+
+}
+
+
+.hero-prev:hover,
+.hero-next:hover {
+
+    background: #9b3438;
+
+    border-color: #9b3438;
+
+}
+
+
+.hero-dots {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.hero-controls {
+    position: absolute;
+    right: clamp(20px, 7vw, 100px);
+    bottom: 24px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 12px;
+    background: rgba(20, 31, 26, .46);
+    backdrop-filter: blur(8px);
+}
+
+
+.dot {
+
+    width: 24px;
+    height: 3px;
+    border: 0;
+    padding: 0;
+    background: rgba(255,255,255,.52);
+    cursor: pointer;
+    transition: width .2s, background-color .2s;
+
+}
+
+
+.active-dot {
+
+    width: 42px;
+    background: white;
+
+}
+
+.hero-autoplay {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255,255,255,.7);
+    border-radius: 50%;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+}
+
+.hero-carousel button:focus-visible,
+.hero-btn:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 4px;
+
+}
+
+
+.bridal-section {
+
+    padding: 80px 6%;
+
+    background: #fff;
+
+}
+
+
+.bridal-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 30px;
+
+}
+
+
+.bridal-card {
+
+    text-decoration: none;
+
+    color: inherit;
+
+    display: block;
+
+    text-align: center;
+
+    background: #faf8f5;
+
+    overflow: hidden;
+
+}
+
+
+.bridal-image {
+
+    width: 100%;
+
+    height: 400px;
+
+    overflow: hidden;
+
+}
+
+
+.bridal-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    transition: transform 0.5s ease;
+
+}
+
+
+.bridal-card:hover .bridal-image img {
+
+    transform: scale(1.05);
+
+}
+
+
+.bridal-info {
+
+    padding: 25px 15px 30px;
+
+}
+
+
+.bridal-info h3 {
+
+    font-size: 22px;
+
+    font-weight: 500;
+
+    margin: 0 0 8px;
+
+}
+
+
+.bridal-info p {
+
+    color: #777;
+
+    font-size: 14px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.bridal-info span {
+
+    font-size: 12px;
+
+    letter-spacing: 1.5px;
+
+    color: #333;
+
+}
+
+
+
+/* =========================
+   COLLECTION
+========================= */
+
+.collections-section {
+
+    padding: 80px 6%;
+
+    background: #faf8f5;
+
+}
+
+
+.collection-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 25px;
+
+}
+
+
+.collection-card {
+
+    text-decoration: none;
+
+    color: inherit;
+
+    text-align: center;
+
+    display: block;
+
+}
+
+
+.collection-image {
+
+    width: 100%;
+
+    height: 450px;
+
+    overflow: hidden;
+
+    margin-bottom: 18px;
+
+    background: transparent;
+
+    position: relative;
+
+}
+
+.collection-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+
+.collection-card:hover .collection-image img {
+
+    transform: scale(1.05);
+
+}
+
+
+.collection-card h3 {
+
+    font-size: 20px;
+
+    margin: 5px 0;
+
+    font-weight: 500;
+
+}
+
+
+.collection-card p {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+
+
+.offers-section {
+
+    padding: 80px 6%;
+
+}
+
+
+.product-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 25px;
+
+}
+
+
+.product-card {
+
+    background: white;
+
+    overflow: hidden;
+
+    transition: 0.3s;
+
+}
+
+
+.product-card:hover {
+
+    transform: translateY(-5px);
+
+}
+
+
+.product-image {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent;
+}
+
+.product-image img {
+    width: 100%;
+    height: 450px;
+    object-fit: contain;
+    display: block;
+}
+
+.product-info {
+
+    padding: 18px;
+
+    text-align: center;
+
+}
+
+
+.product-info h3 {
+
+    font-size: 18px;
+
+    margin-bottom: 12px;
+
+    font-weight: 500;
+
+}
+
+
+.product-price {
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+}
+
+
+.old-price {
+
+    color: #888;
+
+    text-decoration: line-through;
+
+    margin-right: 8px;
+
+}
+
+
+.offer-price {
+
+    color: #b22222;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+
+.view-product-btn {
+
+    display: inline-block;
+
+    margin-top: 15px;
+
+    padding: 10px 20px;
+
+    background: #222;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+}
+
+
+.view-product-btn:hover {
+
+    background: #555;
+
+}
+
+
+.offer-badge {
+
+    position: absolute;
+
+    top: 15px;
+
+    left: 15px;
+
+    background: #b22222;
+
+    color: white;
+
+    padding: 7px 12px;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+}
+
+.offer-ended-badge {
+    background: #f4eee7;
+    color: #514a43;
+}
+
+
+.no-image {
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #999;
+
+}
+
+
+.empty-message {
+
+    text-align: center;
+
+    color: #777;
+
+    width: 100%;
+
+}
+
+
+.offers-section {
+    padding: 70px 6%;
+    text-align: center;
+}
+
+
+.section-label {
+    font-size: 13px;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+
+.section-heading h2 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+
+.section-heading p {
+    color: #777;
+}
+
+
+.offers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 40px;
+}
+
+
+.offer-card {
+    display: block;
+    text-decoration: none;
+    color: #222;
+    background: transparent;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+}
+
+
+.offer-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f4f2ee;
+}
+
+
+.offer-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center 25%;
+}
+
+
+.offer-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #222;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+
+.offer-info {
+    padding: 20px;
+}
+
+
+.offer-info h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    margin: 0;
+}
+
+
+.offer-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 0 15px;
+}
+
+.offer-expired-price {
+    margin: 5px 0 0;
+    color: #29312e;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.offer-expired-note {
+    display: block;
+    margin: 3px 0 15px;
+    color: #747c77;
+    font-size: 11px;
+}
+
+
+.shop-offer {
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+
+@media (max-width: 900px) {
+
+    .offers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .offers-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+
+@media (max-width: 1000px) {
+
+
+    .collection-grid {
+
+        grid-template-columns: repeat(3, 1fr);
+
+    }
+
+
+    .product-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+}
+
+
+@media (max-width: 700px) {
+
+
+    .hero-carousel {
+
+        height: min(560px, calc(100svh - 268px));
+        min-height: 370px;
+
+    }
+
+
+    .banner-content h1 {
+
+        font-size: clamp(43px, 11vw, 66px);
+
+    }
+
+
+    .banner-content p {
+
+        max-width: 330px;
+        font-size: 14px;
+
+    }
+
+    .banner-content {
+        left: 8%;
+        bottom: 88px;
+        width: 78%;
+    }
+
+    .hero-prev {
+        left: 12px;
+    }
+
+    .hero-next {
+        right: 12px;
+    }
+
+    .hero-prev,
+    .hero-next {
+        top: 45%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .hero-controls {
+        right: 8%;
+        bottom: 16px;
+    }
+
+
+    .collection-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+    .bridal-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .bridal-image {
+
+        height: 400px;
+
+    }
+
+
+}
+
+
+@media (max-width: 500px) {
+
+
+    .hero-carousel {
+
+        height: min(510px, calc(100svh - 270px));
+        min-height: 360px;
+
+    }
+
+
+    .banner-content h1 {
+
+        font-size: clamp(40px, 12vw, 56px);
+
+    }
+
+    .banner-content {
+        bottom: 82px;
+        width: 76%;
+    }
+
+    .hero-controls {
+        right: 7%;
+        bottom: 12px;
+        padding: 7px 9px;
+    }
+
+    .dot {
+        width: 18px;
+    }
+
+    .active-dot {
+        width: 32px;
+    }
+
+
+    .collection-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .product-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    }
+
+    .banner-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+        color: #e6d4af;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .banner-eyebrow::before {
+        width: 30px;
+        height: 1px;
+        background: currentColor;
+        content: '';
+    }
+
+    @media (max-width: 500px) {
+        .banner-eyebrow { margin-bottom: 14px; font-size: 9px; }
+        .hero-slide::after {
+            background: linear-gradient(90deg, rgba(20, 31, 26, .76), rgba(20, 31, 26, .28) 76%, rgba(20, 31, 26, .08));
+        }
+        .hero-prev, .hero-next {
+            top: 38%;
+            width: 36px;
+            height: 36px;
+            font-size: 15px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-slide { animation: none; }
+    }
+
+</style>
+
+
+
+<script>
+    const carousel = document.querySelector('.hero-carousel');
+    const slides = Array.from(carousel.querySelectorAll('.hero-slide'));
+    const dots = Array.from(carousel.querySelectorAll('.dot'));
+    const autoplayButton = carousel.querySelector('[data-slide-toggle]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let slideIndex = 0;
+    let autoplayTimer = null;
+    let userPaused = reducedMotion;
+    let pointerInside = false;
+    let focusInside = false;
+
+    function showSlide(index) {
+        slideIndex = (index + slides.length) % slides.length;
+        slides.forEach((slide, position) => {
+            const active = position === slideIndex;
+            slide.classList.toggle('active', active);
+            slide.setAttribute('aria-hidden', String(!active));
+        });
+        dots.forEach((dot, position) => {
+            const active = position === slideIndex;
+            dot.classList.toggle('active-dot', active);
+            dot.setAttribute('aria-pressed', String(active));
+        });
+    }
+
+    function stopAutoplay() {
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = null;
+    }
+
+    function updateAutoplay() {
+        stopAutoplay();
+        const shouldPlay = !userPaused && !pointerInside && !focusInside;
+        autoplayButton.setAttribute('aria-label', shouldPlay ? 'Pause slideshow' : 'Play slideshow');
+        autoplayButton.innerHTML = shouldPlay
+            ? '<i class="fa-solid fa-pause" aria-hidden="true"></i>'
+            : '<i class="fa-solid fa-play" aria-hidden="true"></i>';
+        if (shouldPlay) {
+            autoplayTimer = window.setInterval(() => showSlide(slideIndex + 1), 5000);
+        }
+    }
+
+    carousel.querySelector('[data-slide-prev]').addEventListener('click', () => showSlide(slideIndex - 1));
+    carousel.querySelector('[data-slide-next]').addEventListener('click', () => showSlide(slideIndex + 1));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => showSlide(index)));
+    autoplayButton.addEventListener('click', () => {
+        userPaused = !userPaused;
+        updateAutoplay();
+    });
+    carousel.addEventListener('pointerenter', () => {
+        pointerInside = true;
+        updateAutoplay();
+    });
+    carousel.addEventListener('pointerleave', () => {
+        pointerInside = false;
+        updateAutoplay();
+    });
+    carousel.addEventListener('focusin', () => {
+        focusInside = true;
+        updateAutoplay();
+    });
+    carousel.addEventListener('focusout', (event) => {
+        if (!carousel.contains(event.relatedTarget)) {
+            focusInside = false;
+            updateAutoplay();
+        }
+    });
+
+    showSlide(0);
+    updateAutoplay();
+</script>
+
+
+{% endblock %}

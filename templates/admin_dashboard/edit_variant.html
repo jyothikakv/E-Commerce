@@ -1,0 +1,38 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Edit Product Variant{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">Edit Product Variant</h2>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-primary">
+                    Update Variant
+                </button>
+
+                <a href="{% url 'product_variants' variant.product.id %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

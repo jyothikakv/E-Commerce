@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}Admin | My E-Commerce Website{% endblock %}</title>
+	{% block extrahead %}{% endblock %}
+	<style>
+		body {
+			margin: 0;
+			font-family: Arial, sans-serif;
+			background-color: #f4f6f8;
+		}
+
+		.admin-navbar {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+			padding: 15px 30px;
+			background-color: #222;
+		}
+
+		.admin-navbar a {
+			color: white;
+			text-decoration: none;
+		}
+
+		.admin-navbar .brand {
+			margin-right: auto;
+			font-weight: bold;
+		}
+
+		.admin-content {
+			padding: 30px;
+		}
+	</style>
+</head>
+<body>
+	<nav class="admin-navbar">
+		<a class="brand" href="{% url 'admin:index' %}">Admin Panel</a>
+		<a href="{% url 'admin:index' %}">Dashboard</a>
+		<a href="{% url 'home' %}">View Website</a>
+		<a href="{% url 'admin:logout' %}">Logout</a>
+	</nav>
+
+	<main class="admin-content">
+		{% block content %}{% endblock %}
+	</main>
+
+	{% block footer %}{% endblock %}
+</body>
+</html>

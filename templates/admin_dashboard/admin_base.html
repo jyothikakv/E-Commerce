@@ -1,0 +1,481 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Admin Panel{% endblock %} - VASTRAM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --admin-ink: #29312e;
+            --admin-muted: #747c77;
+            --admin-border: #e2e6e2;
+            --admin-paper: #ffffff;
+            --admin-canvas: #f3f5f2;
+            --admin-rail: #252b28;
+            --admin-accent: #9b3438;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            margin: 0;
+            background: var(--admin-canvas);
+            color: var(--admin-ink);
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .admin-shell {
+            display: grid;
+            grid-template-columns: 252px minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            position: sticky;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 26px 16px 18px;
+            background: var(--admin-rail);
+            color: #f6f7f4;
+            z-index: 101;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 26px;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,.12);
+        }
+
+        .admin-brand-mark {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            background: var(--admin-accent);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .admin-brand-name {
+            display: block;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 19px;
+            line-height: 1.1;
+        }
+
+        .admin-brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #aeb7b1;
+            font-size: 9px;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .admin-nav { padding-top: 22px; }
+
+        .admin-nav-label {
+            margin: 0 10px 9px;
+            color: #9ca7a0;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .admin-nav-group + .admin-nav-group { margin-top: 22px; }
+
+        .admin-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 42px;
+            margin: 3px 0;
+            padding: 0 12px;
+            border-left: 3px solid transparent;
+            color: #d5d9d6;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color .18s, color .18s;
+        }
+
+        .admin-nav-link i {
+            width: 17px;
+            color: #aab3ad;
+            text-align: center;
+        }
+
+        .admin-nav-link:hover,
+        .admin-nav-link.active {
+            background: rgba(255,255,255,.08);
+            color: #fff;
+        }
+
+        .admin-nav-link.active {
+            border-left-color: #c96a68;
+        }
+
+        .admin-nav-link.active i { color: #efb0a8; }
+
+        .admin-nav-badge {
+            margin-left: auto;
+            padding: 3px 7px;
+            background: #c64d50;
+            color: #fff;
+            font-size: 10px;
+        }
+
+        .admin-sidebar-footer {
+            display: grid;
+            gap: 8px;
+            margin-top: auto;
+            padding: 18px 8px 0;
+            border-top: 1px solid rgba(255,255,255,.12);
+        }
+
+        .admin-sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 7px;
+            color: #c8cfca;
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+        .admin-sidebar-footer a:hover { color: #fff; }
+
+        .admin-main {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+        }
+
+        .admin-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            padding: 0 clamp(20px, 3vw, 44px);
+            border-bottom: 1px solid var(--admin-border);
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(12px);
+        }
+
+        .admin-topbar-start,
+        .admin-topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .admin-topbar-title {
+            color: var(--admin-muted);
+            font-size: 11px;
+        }
+
+        .admin-user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            border: 1px solid var(--admin-border);
+            color: #505953;
+            font-size: 11px;
+        }
+
+        .admin-user-chip i { color: var(--admin-accent); }
+
+        .admin-topbar .btn {
+            border-radius: 2px;
+            font-size: 11px;
+        }
+
+        .admin-content {
+            width: 100%;
+            max-width: 1640px;
+            margin: 0 auto;
+            padding: clamp(24px, 3vw, 42px);
+            flex: 1;
+        }
+
+        .admin-content h2,
+        .admin-content h3,
+        .admin-content h4 { color: var(--admin-ink); }
+
+        .admin-content .card {
+            border-color: var(--admin-border);
+            border-radius: 4px;
+        }
+
+        .admin-content .btn-primary {
+            border-color: var(--admin-accent);
+            background: var(--admin-accent);
+        }
+
+        .admin-content .btn-primary:hover {
+            border-color: #7e292d;
+            background: #7e292d;
+        }
+
+        .admin-table-toolbar {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) minmax(190px, 280px) auto;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .admin-table-toolbar input,
+        .admin-table-toolbar select { min-width: 0; }
+
+        .admin-table-toolbar-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-table-low-stock-filter {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--admin-muted);
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .admin-table-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 14px;
+        }
+
+        .admin-table-pagination-start,
+        .admin-table-pagination-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-table-page-size { width: 76px; }
+        .admin-table-page-info { color: var(--admin-muted); font-size: 11px; }
+
+        .admin-table-toolbar input:focus,
+        .admin-table-toolbar select:focus {
+            border-color: #9b3438;
+            box-shadow: 0 0 0 .15rem rgba(155,52,56,.12);
+        }
+
+        .admin-footer {
+            padding: 16px clamp(20px, 3vw, 44px);
+            border-top: 1px solid var(--admin-border);
+            color: #818983;
+            font-size: 10px;
+        }
+
+        .admin-menu-toggle,
+        .admin-sidebar-close,
+        .admin-scrim { display: none; }
+
+        @media (max-width: 900px) {
+            .admin-shell { display: block; }
+
+            .admin-sidebar {
+                position: fixed;
+                left: 0;
+                width: min(280px, 86vw);
+                transform: translateX(-102%);
+                transition: transform .22s ease;
+                box-shadow: 14px 0 36px rgba(0,0,0,.18);
+            }
+
+            .admin-sidebar.is-open { transform: translateX(0); }
+
+            .admin-sidebar-close {
+                display: grid;
+                place-items: center;
+                width: 34px;
+                height: 34px;
+                margin-left: auto;
+                border: 1px solid rgba(255,255,255,.2);
+                background: transparent;
+                color: #fff;
+            }
+
+            .admin-brand { padding-right: 0; }
+
+            .admin-scrim.is-visible {
+                position: fixed;
+                inset: 0;
+                z-index: 100;
+                display: block;
+                background: rgba(21,26,23,.48);
+            }
+
+            .admin-menu-toggle {
+                display: grid;
+                place-items: center;
+                width: 36px;
+                height: 36px;
+                border: 1px solid var(--admin-border);
+                background: #fff;
+                color: var(--admin-ink);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .admin-topbar { min-height: 60px; padding: 0 14px; }
+            .admin-topbar-start, .admin-topbar-actions { gap: 9px; }
+            .admin-user-chip { display: none; }
+            .admin-content { padding: 22px 14px 32px; }
+            .admin-footer { padding: 14px; }
+            .admin-table-toolbar { grid-template-columns: 1fr; }
+            .admin-table-toolbar-options { flex-wrap: wrap; }
+            .admin-table-pagination { align-items: flex-start; flex-direction: column; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-shell">
+    <div class="admin-scrim" data-admin-scrim></div>
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+        <div class="admin-brand">
+            <span class="admin-brand-mark"><i class="fa-solid fa-shirt" aria-hidden="true"></i></span>
+            <span>
+                <span class="admin-brand-name">VASTRAM</span>
+                <span class="admin-brand-caption">Store administration</span>
+            </span>
+            <button class="admin-sidebar-close" type="button" aria-label="Close navigation" data-admin-nav-close>
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <nav class="admin-nav">
+            <div class="admin-nav-group">
+                <p class="admin-nav-label">Workspace</p>
+                <a href="{% url 'admin_dashboard' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_dashboard' %} active{% endif %}">
+                    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i> Dashboard
+                </a>
+            </div>
+
+            <div class="admin-nav-group">
+                <p class="admin-nav-label">Store</p>
+                <a href="{% url 'admin_products' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_products' %} active{% endif %}">
+                    <i class="fa-solid fa-box-open" aria-hidden="true"></i> Products
+                </a>
+                <a href="{% url 'admin_categories' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_categories' %} active{% endif %}">
+                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i> Categories
+                </a>
+                <a href="{% url 'admin_orders' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_orders' or request.resolver_match.url_name == 'admin_order_detail' %} active{% endif %}">
+                    <i class="fa-solid fa-receipt" aria-hidden="true"></i> Orders
+                    {% if pending_return_count %}<span class="admin-nav-badge">{{ pending_return_count }}</span>{% endif %}
+                </a>
+                <a href="{% url 'admin_price_history' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_price_history' %} active{% endif %}">
+                    <i class="fa-solid fa-chart-line" aria-hidden="true"></i> Price history
+                </a>
+                <a href="{% url 'admin_offers' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_offers' %} active{% endif %}">
+                    <i class="fa-solid fa-tag" aria-hidden="true"></i> Offers
+                </a>
+            </div>
+
+            <div class="admin-nav-group">
+                <p class="admin-nav-label">Customers</p>
+                <a href="{% url 'admin_users' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_users' %} active{% endif %}">
+                    <i class="fa-solid fa-users" aria-hidden="true"></i> Users
+                </a>
+                <a href="{% url 'admin_addresses' %}" class="admin-nav-link{% if request.resolver_match.url_name == 'admin_addresses' %} active{% endif %}">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Addresses
+                </a>
+            </div>
+        </nav>
+
+        <div class="admin-sidebar-footer">
+            <a href="{% url 'home' %}"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> View storefront</a>
+            <a href="{% url 'logout' %}"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i> Sign out</a>
+        </div>
+    </aside>
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <div class="admin-topbar-start">
+                <button class="admin-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="adminSidebar" data-admin-nav-toggle>
+                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                </button>
+                <span class="admin-topbar-title">VASTRAM / Administration</span>
+            </div>
+            <div class="admin-topbar-actions">
+                <span class="admin-user-chip"><i class="fa-regular fa-user" aria-hidden="true"></i> {{ request.user.username }}</span>
+                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-secondary">View store</a>
+            </div>
+        </header>
+
+        <main class="admin-content">
+            {% if messages %}
+                <div class="mb-3" aria-live="polite">
+                    {% for message in messages %}
+                        <div class="alert {% if 'error' in message.tags %}alert-danger{% elif 'success' in message.tags %}alert-success{% else %}alert-info{% endif %} py-2 mb-2" role="status">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="admin-footer">VASTRAM store administration</footer>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const adminSidebar = document.getElementById('adminSidebar');
+    const adminNavToggle = document.querySelector('[data-admin-nav-toggle]');
+    const adminNavClose = document.querySelector('[data-admin-nav-close]');
+    const adminScrim = document.querySelector('[data-admin-scrim]');
+
+    function closeAdminNavigation() {
+        adminSidebar.classList.remove('is-open');
+        adminScrim.classList.remove('is-visible');
+        adminNavToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    adminNavToggle.addEventListener('click', function () {
+        const isOpen = adminNavToggle.getAttribute('aria-expanded') === 'true';
+        adminSidebar.classList.toggle('is-open', !isOpen);
+        adminScrim.classList.toggle('is-visible', !isOpen);
+        adminNavToggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    adminNavClose.addEventListener('click', closeAdminNavigation);
+    adminScrim.addEventListener('click', closeAdminNavigation);
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeAdminNavigation();
+    });
+    adminSidebar.querySelectorAll('.admin-nav-link').forEach(function (link) {
+        link.addEventListener('click', closeAdminNavigation);
+    });
+
+</script>
+</body>
+</html>

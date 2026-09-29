@@ -1,0 +1,360 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}
+Categories - VASTRAM
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.categories-page {
+    padding: 60px 8%;
+}
+
+/* Heading */
+
+.categories-heading {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.categories-heading h1 {
+    font-size: 36px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.categories-heading p {
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* Category Grid */
+
+.categories-grid {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+
+/* Category Card */
+
+.category-card {
+    border: 1px solid #eee;
+    padding: 30px;
+    background: #fff;
+    transition: 0.3s;
+}
+
+.category-card:hover {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+
+/* Main Category */
+
+.category-card h2 {
+    font-size: 23px;
+    margin: 0 0 20px;
+    letter-spacing: 1px;
+}
+
+.category-card h2 a {
+    color: #222;
+    text-decoration: none;
+}
+
+.category-card h2 a:hover {
+    color: #888;
+}
+
+
+/* Subcategories */
+
+.subcategories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.subcategory {
+    border: 1px solid #ddd;
+    padding: 9px 14px;
+    color: #555;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.subcategory:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+}
+
+
+/* View Category */
+
+.view-category {
+    display: inline-block;
+    margin-top: 22px;
+    color: #222;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.view-category:hover {
+    color: #888;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .categories-page {
+        padding: 40px 5%;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<div class="categories-page">
+
+    <!-- Heading -->
+
+    <div class="categories-heading">
+
+        <h1>OUR CATEGORIES</h1>
+
+        <p>
+            Explore our collection of traditional and contemporary fashion.
+        </p>
+
+    </div>
+
+
+    <!-- Categories -->
+
+    <div class="categories-grid">
+
+
+        <!-- Saree -->
+
+        <div class="category-card">
+
+            <h2>
+                <a href="{% url 'product_list' %}?category=Saree">
+                    Saree
+                </a>
+            </h2>
+
+            <div class="subcategories">
+
+                <a href="{% url 'product_list' %}?category=Kaveri%20Saree"
+                   class="subcategory">
+                    Kaveri Saree
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Banarasi%20Saree"
+                   class="subcategory">
+                    Banarasi Saree
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Tissue%20Saree"
+                   class="subcategory">
+                    Tissue Saree
+                </a>
+
+            </div>
+
+            <a href="{% url 'product_list' %}?category=Saree"
+               class="view-category">
+                VIEW SAREES →
+            </a>
+
+        </div>
+
+
+        <!-- Kurtis -->
+
+        <div class="category-card">
+
+            <h2>
+                <a href="{% url 'product_list' %}?category=Kurtis">
+                    Kurtis
+                </a>
+            </h2>
+
+            <div class="subcategories">
+
+                <a href="{% url 'product_list' %}?category=Chikankari%20Kurti"
+                   class="subcategory">
+                    Chikankari Kurti
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Cotton%20Kurti"
+                   class="subcategory">
+                    Cotton Kurti
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Straight%20Kurti"
+                   class="subcategory">
+                    Straight Kurti
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Embroidered%20Kurti"
+                   class="subcategory">
+                    Embroidered Kurti
+                </a>
+
+            </div>
+
+            <a href="{% url 'product_list' %}?category=Kurtis"
+               class="view-category">
+                VIEW KURTIS →
+            </a>
+
+        </div>
+
+
+        <!-- Anarkali -->
+
+        <div class="category-card">
+
+            <h2>
+                <a href="{% url 'product_list' %}?category=Anarkali">
+                    Anarkali
+                </a>
+            </h2>
+
+            <div class="subcategories">
+
+                <a href="{% url 'product_list' %}?category=Designer%20Anarkali"
+                   class="subcategory">
+                    Designer Anarkali
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Embroidered%20Anarkali"
+                   class="subcategory">
+                    Embroidered Anarkali
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Anarkali%20Suit"
+                   class="subcategory">
+                    Anarkali Suit
+                </a>
+
+            </div>
+
+            <a href="{% url 'product_list' %}?category=Anarkali"
+               class="view-category">
+                VIEW ANARKALI →
+            </a>
+
+        </div>
+
+
+        <!-- Partywear -->
+
+        <div class="category-card">
+
+            <h2>
+                <a href="{% url 'product_list' %}?category=Party Wear">
+                    Partywear
+                </a>
+            </h2>
+
+            <div class="subcategories">
+
+                <a href="{% url 'product_list' %}?category=Party%20Dresses"
+                   class="subcategory">
+                    Party Dresses
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Designer%20Partywear"
+                   class="subcategory">
+                    Designer Partywear
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Embroidered%20Partywear"
+                   class="subcategory">
+                    Embroidered Partywear
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Sequin%20Partywear"
+                   class="subcategory">
+                    Sequin Partywear
+                </a>
+
+            </div>
+
+            <a href="{% url 'product_list' %}?category=Party Wear"
+               class="view-category">
+                VIEW PARTYWEAR →
+            </a>
+
+        </div>
+
+
+        <!-- Set Mundu -->
+
+        <div class="category-card">
+
+            <h2>
+                <a href="{% url 'product_list' %}?category=Set%20Mundu">
+                    Set Mundu
+                </a>
+            </h2>
+
+            <div class="subcategories">
+
+                <a href="{% url 'product_list' %}?category=Kasavu%20Set%20Mundu"
+                   class="subcategory">
+                    Kasavu Set Mundu
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Traditional%20Set%20Mundu"
+                   class="subcategory">
+                    Traditional Set Mundu
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Designer%20Set%20Mundu"
+                   class="subcategory">
+                    Designer Set Mundu
+                </a>
+
+                <a href="{% url 'product_list' %}?category=Wedding%20Set%20Mundu"
+                   class="subcategory">
+                    Wedding Set Mundu
+                </a>
+
+            </div>
+
+            <a href="{% url 'product_list' %}?category=Set%20Mundu"
+               class="view-category">
+                VIEW SET MUNDU →
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}
+

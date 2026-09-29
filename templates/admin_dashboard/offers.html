@@ -1,0 +1,161 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}
+Offers
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>Offers</h2>
+
+        <p class="text-muted mb-0">
+            Manage and view product offers.
+        </p>
+    </div>
+
+    <a href="{% url 'add_offer' %}"
+       class="btn btn-dark">
+        + Add Offer
+    </a>
+
+</div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            {% if offers %}
+
+            {% include 'admin_dashboard/includes/table_controls.html' %}
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle admin-searchable-table">
+
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Variant</th>
+                            <th>Price before offer</th>
+                            <th>Offer Price</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Price after offer</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for offer in offers %}
+
+                        <tr data-search="{{ offer.variant.product.name }} {{ offer.variant.color }} {{ offer.variant.size }} {{ offer.status }} {{ offer.offer_price }}">
+
+                            <td>
+                                {{ offer.variant.product.name }}
+                            </td>
+
+                            <td>
+                                {% if offer.variant.color %}
+                                    {{ offer.variant.color }}
+                                {% endif %}
+
+                                {% if offer.variant.size %}
+                                    / {{ offer.variant.size }}
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                ₹{{ offer.price_before_offer }}
+                            </td>
+
+                            <td>
+                                <strong class="text-success">
+                                    ₹{{ offer.offer_price }}
+                                </strong>
+                            </td>
+
+                            <td data-sort-value="{{ offer.start_date|date:'U' }}">
+                                {{ offer.start_date|date:"d M Y, h:i A" }}
+                            </td>
+
+                            <td data-sort-value="{{ offer.end_date|date:'U' }}">
+                                {{ offer.end_date|date:"d M Y, h:i A" }}
+                            </td>
+
+                            <td>
+                                {% if offer.restored_price %}
+                                    ₹{{ offer.restored_price }}
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+
+    {% if offer.status == "Active" %}
+
+        <span class="badge bg-success">
+            Active
+        </span>
+
+    {% elif offer.status == "Upcoming" %}
+
+        <span class="badge bg-primary">
+            Upcoming
+        </span>
+
+    {% elif offer.status == "Expired" %}
+
+        <span class="badge bg-danger">
+            Expired
+        </span>
+
+    {% else %}
+
+        <span class="badge bg-secondary">
+            Inactive
+        </span>
+
+    {% endif %}
+                            </td>
+
+                            <td data-sort-value="{{ offer.created_at|date:'U' }}">
+                                {{ offer.created_at|date:"d M Y, h:i A" }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+            {% include 'admin_dashboard/includes/table_pagination.html' %}
+
+            {% else %}
+
+            <div class="text-center py-5">
+
+                <h5>No Offers Found</h5>
+
+                <p class="text-muted">
+                    Product offers will appear here when they are created.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

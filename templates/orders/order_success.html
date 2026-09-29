@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Order Successful - VASTRAM
+{% endblock %}
+
+{% block content %}
+
+<div style="
+    max-width: 700px;
+    margin: 80px auto;
+    text-align: center;
+    padding: 50px 30px;
+">
+
+    <div style="
+        font-size: 50px;
+        margin-bottom: 20px;
+    ">
+        ✓
+    </div>
+
+    <h1 style="
+        font-size: 32px;
+        font-weight: 500;
+        margin-bottom: 15px;
+    ">
+        Order Placed Successfully
+    </h1>
+
+    <p style="
+        color: #777;
+        font-size: 15px;
+        margin-bottom: 10px;
+    ">
+        Thank you for shopping with VASTRAM.
+    </p>
+
+    <p style="
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 30px;
+    ">
+        Your Order ID is
+        <strong>{{ order.uuid }}</strong>
+    </p>
+
+    <p style="
+        font-size: 18px;
+        margin-bottom: 30px;
+    ">
+        Total Amount:
+        <strong>₹{{ order.total_amount }}</strong>
+    </p>
+
+    <a href="{% url 'order_list' %}"
+       style="
+       display: inline-block;
+       background: #222;
+       color: white;
+       text-decoration: none;
+       padding: 14px 25px;
+       font-size: 11px;
+       letter-spacing: 1px;
+       margin-right: 8px;
+       ">
+        VIEW MY ORDERS
+    </a>
+
+    <a href="{% url 'order_detail' order.uuid %}"
+       style="
+       display: inline-block;
+       background: #9b3438;
+       color: white;
+       text-decoration: none;
+       padding: 14px 25px;
+       font-size: 11px;
+       letter-spacing: 1px;
+       margin-right: 8px;
+       ">
+        TRACK THIS ORDER
+    </a>
+
+    <a href="{% url 'home' %}"
+       style="
+       display: inline-block;
+       border: 1px solid #222;
+       color: #222;
+       text-decoration: none;
+       padding: 13px 25px;
+       font-size: 11px;
+       letter-spacing: 1px;
+       ">
+        CONTINUE SHOPPING
+    </a>
+
+</div>
+
+{% endblock %}

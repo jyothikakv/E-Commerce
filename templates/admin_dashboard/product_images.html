@@ -1,0 +1,80 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Product Images{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>{{ product.name }}</h2>
+        <p class="text-muted">Manage Product Images</p>
+    </div>
+
+    <a href="{% url 'add_product_image' product.id %}"
+       class="btn btn-success">
+        + Add Image
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <div class="row">
+
+            {% for image in images %}
+
+                <div class="col-md-4 mb-4">
+
+                    <div class="card">
+
+                        <img src="{{ image.image.url }}"
+                             class="card-img-top"
+                             style="height: 250px; object-fit: cover;"
+                             alt="{{ product.name }}">
+
+                        <div class="card-body text-center">
+
+                            <p class="mb-0">
+                                {{ product.name }}
+                            </p>
+
+                            <a href="{% url 'delete_product_image' image.id %}"
+                                    class="btn btn-sm btn-danger mt-2">
+                                                     Delete
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-12">
+
+                    <p class="text-center text-muted">
+                        No images available for this product.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<a href="{% url 'admin_products' %}"
+   class="btn btn-secondary mt-3">
+    ← Back to Products
+</a>
+
+{% endblock %}

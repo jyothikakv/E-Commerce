@@ -1,0 +1,464 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    Admin Dashboard
+</h2>
+
+<p class="text-muted">
+    Welcome to the E-Commerce Admin Panel.
+</p>
+
+<div class="row">
+
+
+<div class="col-md-3 mb-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Products
+            </h5>
+
+            <h2>
+                {{ product_count }}
+            </h2>
+
+            <p class="text-muted">
+                Total Products
+            </p>
+
+            <a href="{% url 'admin_products' %}" class="btn btn-primary">
+                    Manage Products
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-3 mb-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Categories
+            </h5>
+
+            <h2>
+                {{ category_count }}
+            </h2>
+
+            <p class="text-muted">
+                Total Categories
+            </p>
+
+            <a href="{% url 'admin_categories' %}" class="btn btn-primary">
+                    Manage Categories
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-3 mb-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Orders
+            </h5>
+
+            <h2>
+                {{ order_count }}
+            </h2>
+
+            <p class="text-muted">
+                Total Orders
+            </p>
+
+            {% if pending_return_count %}
+            <p class="text-danger fw-semibold">
+                Return requests awaiting review: {{ pending_return_count }}
+            </p>
+            {% endif %}
+
+            <a href="{% url 'admin_orders' %}" class="btn btn-primary">
+                Manage Orders
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-3 mb-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Users
+            </h5>
+
+            <h2>
+               {{ user_count }}
+            </h2>
+
+            <p class="text-muted">
+                Registered Users
+            </p>
+
+            <a href="{% url 'admin_users' %}" class="btn btn-primary">
+                Manage Users
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-6 mb-4">
+
+    <div class="card shadow-sm h-100">
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Price History
+            </h5>
+
+            <p class="card-text text-muted">
+                View previous and current product prices.
+            </p>
+
+            <a href="{% url 'admin_price_history' %}"
+               class="btn btn-dark">
+                View Price History
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="col-md-6 mb-4">
+
+    <div class="card shadow-sm h-100">
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Offers
+            </h5>
+
+            <p class="card-text text-muted">
+                View and manage product offers.
+            </p>
+
+            <a href="{% url 'admin_offers' %}"
+               class="btn btn-dark">
+                View Offers
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+
+<hr class="my-4">
+<div class="row g-4 mb-4" aria-label="Order analytics">
+    <div class="col-xl-8">
+        <section class="card shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                        <h5 class="card-title mb-1">Orders and order value</h5>
+                        <p class="text-muted small mb-0">Monthly totals for the last six months</p>
+                    </div>
+                    <span class="chart-key"><span class="chart-key-dot chart-key-orders"></span>Orders <span class="chart-key-dot chart-key-revenue"></span>Value</span>
+                </div>
+                <div class="chart-frame">
+                    <canvas id="monthlyOrdersChart" aria-label="Monthly order count and order value chart" role="img"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-xl-4">
+        <section class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-1">Orders by status</h5>
+                <p class="text-muted small mb-3">Current status of all orders</p>
+                <div class="chart-frame chart-frame--donut">
+                    <canvas id="orderStatusChart" aria-label="Order status breakdown chart" role="img"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+    .chart-frame { position: relative; height: 300px; min-width: 0; }
+    .chart-frame--donut { height: 300px; }
+    .chart-key { display: inline-flex; align-items: center; gap: 7px; color: #625c58; font-size: 11px; white-space: nowrap; }
+    .chart-key-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .chart-key-orders { background: #557f75; }
+    .chart-key-revenue { margin-left: 8px; background: #9b3438; }
+    .inventory-controls { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(210px, 260px) auto; align-items: center; gap: 10px; }
+    .inventory-search { position: relative; }
+    .inventory-search i { position: absolute; top: 50%; left: 11px; color: #747c77; transform: translateY(-50%); }
+    .inventory-search input { padding-left: 34px; }
+    .inventory-low-filter { display: inline-flex; align-items: center; gap: 7px; color: #505953; font-size: 12px; white-space: nowrap; }
+    #inventoryTable thead th { position: sticky; top: 0; z-index: 1; white-space: nowrap; }
+    #inventoryTable td { vertical-align: middle; }
+    .inventory-pagination { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 16px; border-top: 1px solid #e2e6e2; }
+    .inventory-pagination-info { color: #747c77; font-size: 11px; }
+    .inventory-pagination-controls { display: flex; align-items: center; gap: 8px; }
+    .inventory-pagination .form-select { width: 76px; }
+    @media (max-width: 575px) {
+        .inventory-pagination { align-items: flex-start; flex-direction: column; }
+    }
+    .inventory-card { overflow: hidden; }
+    .restock-form input { width: 78px; min-width: 78px; }
+    @media (max-width: 575px) {
+        .chart-frame, .chart-frame--donut { height: 250px; }
+        .chart-key { gap: 5px; font-size: 10px; }
+        .inventory-controls { grid-template-columns: 1fr; }
+        .inventory-low-filter { padding: 4px 0; }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+{{ monthly_chart_data|json_script:"monthly-chart-data" }}
+{{ status_chart_data|json_script:"status-chart-data" }}
+<script>
+    const monthlyChartData = JSON.parse(document.getElementById('monthly-chart-data').textContent);
+    const statusChartData = JSON.parse(document.getElementById('status-chart-data').textContent);
+    const chartColors = ['#9b3438', '#557f75', '#c5a15a', '#617a99', '#8f7771'];
+
+    new Chart(document.getElementById('monthlyOrdersChart'), {
+        type: 'bar',
+        data: {
+            labels: monthlyChartData.labels,
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Orders',
+                    data: monthlyChartData.orders,
+                    yAxisID: 'orders',
+                    backgroundColor: 'rgba(85, 127, 117, .78)',
+                    borderRadius: 3,
+                    maxBarThickness: 34,
+                },
+                {
+                    type: 'line',
+                    label: 'Order value',
+                    data: monthlyChartData.revenue,
+                    yAxisID: 'revenue',
+                    borderColor: '#9b3438',
+                    backgroundColor: 'rgba(155, 52, 56, .10)',
+                    pointBackgroundColor: '#9b3438',
+                    pointRadius: 3,
+                    tension: .35,
+                    fill: true,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label(context) {
+                            if (context.dataset.yAxisID === 'revenue') {
+                                return `Order value: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(context.raw)}`;
+                            }
+                            return `Orders: ${context.raw}`;
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: { grid: { display: false } },
+                orders: {
+                    type: 'linear',
+                    position: 'left',
+                    beginAtZero: true,
+                    ticks: { precision: 0 },
+                    grid: { color: 'rgba(51, 45, 43, .07)' },
+                },
+                revenue: {
+                    type: 'linear',
+                    position: 'right',
+                    beginAtZero: true,
+                    grid: { drawOnChartArea: false },
+                    ticks: {
+                        callback(value) {
+                            return `₹${new Intl.NumberFormat('en-IN', { notation: 'compact', maximumFractionDigits: 1 }).format(value)}`;
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    new Chart(document.getElementById('orderStatusChart'), {
+        type: 'doughnut',
+        data: {
+            labels: statusChartData.labels,
+            datasets: [{
+                data: statusChartData.values,
+                backgroundColor: chartColors,
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverOffset: 5,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '68%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { usePointStyle: true, pointStyle: 'circle', padding: 16 },
+                },
+            },
+        },
+    });
+</script>
+
+<section class="card shadow-sm mb-4 inventory-card">
+    <div class="card-body p-0">
+        <div class="inventory-header p-4 border-bottom">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+                <div>
+                    <h3 class="h5 mb-1">Products and inventory</h3>
+                    <p class="text-muted small mb-0">Search and sort product variants, pricing, offers, and stock.</p>
+                </div>
+                <div class="d-flex flex-wrap gap-3 small">
+                    <span><strong>{{ inventory_summary.available_units }}</strong> available</span>
+                    <span><strong>{{ inventory_summary.pending_units }}</strong> pending</span>
+                    <span><strong>{{ inventory_summary.sold_units }}</strong> sold</span>
+                    <span class="text-danger"><strong>{{ inventory_summary.low_stock_variants }}</strong> low stock</span>
+                </div>
+            </div>
+            {% include 'admin_dashboard/includes/table_controls.html' %}
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="inventoryTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Variant</th>
+                        <th>Base price</th>
+                        <th>Offer price</th>
+                        <th>Offer start</th>
+                        <th>Offer end</th>
+                        <th>Available</th>
+                        <th>Pending</th>
+                        <th>Sold</th>
+                        <th>Stock level</th>
+                        <th>Restore stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for variant in inventory_variants %}
+                    <tr>
+                        <td class="fw-semibold">{{ variant.product.name }}</td>
+                        <td>{{ variant.product.category.name }}</td>
+                        <td>{{ variant.color|default:'-' }}{% if variant.size %} / {{ variant.size }}{% endif %}</td>
+                        <td class="text-nowrap">₹{{ variant.price }}</td>
+                        <td>
+                            {% if variant.dashboard_offer %}
+                                <strong class="text-danger">₹{{ variant.dashboard_offer.offer_price }}</strong>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">{% if variant.dashboard_offer %}{{ variant.dashboard_offer.start_date|date:"d M Y, h:i A" }}{% else %}<span class="text-muted">—</span>{% endif %}</td>
+                        <td class="text-nowrap">{% if variant.dashboard_offer %}{{ variant.dashboard_offer.end_date|date:"d M Y, h:i A" }}{% else %}<span class="text-muted">—</span>{% endif %}</td>
+                        <td class="fw-semibold">{{ variant.stock }}</td>
+                        <td>{{ variant.pending_quantity }}</td>
+                        <td>{{ variant.sold_quantity }}</td>
+                        <td>
+                            {% if variant.stock == 0 %}
+                                <span class="badge bg-danger">Out of stock</span>
+                            {% elif variant.is_low_stock %}
+                                <span class="badge bg-warning text-dark">Low</span>
+                            {% else %}
+                                <span class="badge bg-success">In stock</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'restock_variant' variant.id %}" class="d-flex gap-2 restock-form">
+                                {% csrf_token %}
+                                <label class="visually-hidden" for="restock-{{ variant.id }}">Units to restore for {{ variant.product.name }}</label>
+                                <input id="restock-{{ variant.id }}" type="number" name="quantity" min="1" step="1" required class="form-control form-control-sm" placeholder="Units">
+                                <button type="submit" class="btn btn-sm btn-outline-success" aria-label="Restore stock for {{ variant.product.name }}">Add</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="12" class="text-center text-muted py-4">No product variants to show.</td></tr>
+                    {% endfor %}
+                    <tr id="inventoryNoResults" hidden><td colspan="12" class="text-center text-muted py-4">No products match these filters.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        {% include 'admin_dashboard/includes/table_pagination.html' %}
+    </div>
+</section>
+
+<hr class="my-4">
+
+<h4>
+    Quick Actions
+</h4>
+
+<div class="mt-3">
+
+
+<a href="{% url 'add_product' %}" class="btn btn-success me-2">
+    + Add Product
+</a>
+
+<a href="{% url 'admin_categories' %}" class="btn btn-secondary me-2">
+    Manage Categories
+</a>
+
+<a href="{% url 'admin_orders' %}" class="btn btn-info">
+    View Orders
+</a>
+
+
+</div>
+
+{% endblock %}

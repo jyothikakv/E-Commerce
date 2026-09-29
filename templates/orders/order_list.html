@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+<div class="orders-page">
+    <header class="orders-heading">
+        <p class="orders-eyebrow">VASTRAM ACCOUNT</p>
+        <h1>My Orders</h1>
+        <p class="orders-intro">Your order history and delivery updates.</p>
+    </header>
+
+    {% if orders %}
+        <div class="orders-list">
+        {% for order in orders %}
+            <article class="order-row">
+                <div class="order-row-header">
+                    <div class="order-reference">
+                        <span class="order-label">ORDER</span>
+                        <h2>{{ order.uuid }}</h2>
+                    </div>
+                    <span class="status-pill status-{{ order.status|lower }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="order-summary">
+                    <div class="order-summary-item">
+                        <span class="order-label">PLACED ON</span>
+                        <strong>{{ order.created_at|date:"d M Y, h:i A" }}</strong>
+                    </div>
+                    <div class="order-summary-item order-total">
+                        <span class="order-label">ORDER TOTAL</span>
+                        <strong>₹{{ order.total_amount }}</strong>
+                    </div>
+                </div>
+
+                <div class="order-row-footer">
+                    <div class="delivery-summary">
+                        <span class="order-label">DELIVERING TO</span>
+                        <strong>{{ order.full_name }}</strong>
+                        <span>{{ order.city }}, {{ order.state }} {{ order.pincode }}</span>
+                    </div>
+                    <a class="order-details-link" href="{% url 'order_detail' order.uuid %}">
+                        Track order <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </article>
+        {% endfor %}
+        </div>
+    {% else %}
+        <section class="empty-orders">
+            <i class="fa-solid fa-box-open" aria-hidden="true"></i>
+            <h2>No orders yet</h2>
+            <p>Your orders will appear here once you place one.</p>
+            <a href="{% url 'product_list' %}">Explore products</a>
+        </section>
+    {% endif %}
+</div>
+
+<style>
+    .orders-page {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 42px 28px 76px;
+        color: #332d2b;
+    }
+
+    .orders-heading {
+        margin-bottom: 28px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid #e8e2df;
+    }
+
+    .orders-eyebrow,
+    .order-label {
+        display: block;
+        margin: 0 0 7px;
+        color: #9b3438;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+    }
+
+    .orders-heading h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+    }
+
+    .orders-intro {
+        margin: 8px 0 0;
+        color: #716b68;
+        font-size: 14px;
+    }
+
+    .orders-list {
+        display: grid;
+        gap: 14px;
+    }
+
+    .order-row {
+        padding: 20px 22px;
+        border: 1px solid #e8e2df;
+        background: #fff;
+    }
+
+    .order-row-header,
+    .order-row-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+    }
+
+    .order-reference h2 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .order-reference .order-label {
+        margin-bottom: 5px;
+    }
+
+    .status-pill {
+        flex: 0 0 auto;
+        padding: 7px 11px;
+        background: #f4ebe7;
+        color: #8c3739;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-confirmed { background: #edf1e8; color: #566b3e; }
+    .status-shipped { background: #eaf0f5; color: #3e627c; }
+    .status-delivered { background: #eaf2ec; color: #376348; }
+    .status-cancelled { background: #f8e9e8; color: #9b3438; }
+
+    .order-summary {
+        display: flex;
+        gap: 54px;
+        margin: 18px 0;
+        padding: 15px 0;
+        border-top: 1px solid #eee9e6;
+        border-bottom: 1px solid #eee9e6;
+    }
+
+    .order-summary-item strong,
+    .delivery-summary strong,
+    .delivery-summary > span:last-child {
+        display: block;
+        font-size: 13px;
+    }
+
+    .order-total strong {
+        font-size: 16px;
+    }
+
+    .delivery-summary strong {
+        margin-bottom: 4px;
+    }
+
+    .delivery-summary > span:last-child {
+        color: #716b68;
+    }
+
+    .order-details-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        flex: 0 0 auto;
+        color: #9b3438;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .order-details-link:hover { text-decoration: underline; }
+
+    .empty-orders {
+        display: grid;
+        justify-items: center;
+        padding: 52px 20px;
+        border: 1px solid #e8e2df;
+        text-align: center;
+    }
+
+    .empty-orders > i {
+        margin-bottom: 14px;
+        color: #9b3438;
+        font-size: 24px;
+    }
+
+    .empty-orders h2 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 500;
+    }
+
+    .empty-orders p {
+        margin: 8px 0 18px;
+        color: #716b68;
+        font-size: 13px;
+    }
+
+    .empty-orders a {
+        padding: 11px 16px;
+        background: #332d2b;
+        color: #fff;
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+    @media (max-width: 620px) {
+        .orders-page { padding: 28px 16px 52px; }
+        .orders-heading h1 { font-size: 27px; }
+        .order-row { padding: 17px; }
+        .order-row-footer { align-items: flex-start; flex-direction: column; }
+        .order-summary { gap: 30px; }
+    }
+
+    @media (max-width: 380px) {
+        .order-row-header { align-items: flex-start; flex-direction: column; }
+        .order-summary { justify-content: space-between; gap: 12px; }
+    }
+</style>
+
+{% endblock %}

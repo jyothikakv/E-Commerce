@@ -1,0 +1,115 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}Manage Addresses{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h2>Manage Addresses</h2>
+
+    <p class="text-muted">
+        View customer delivery addresses.
+    </p>
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Address Type</th>
+                        <th>Full Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Pincode</th>
+                        <th>Default</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for address in addresses %}
+
+                    <tr>
+
+                        <td>{{ address.id }}</td>
+
+                        <td>
+                            {{ address.user.username }}
+                        </td>
+
+                        <td>
+                            {{ address.address_type }}
+                        </td>
+
+                        <td>
+                            {{ address.full_name }}
+                        </td>
+
+                        <td>
+                            {{ address.phone }}
+                        </td>
+
+                        <td>
+                            {{ address.address }}
+                        </td>
+
+                        <td>
+                            {{ address.city }}
+                        </td>
+
+                        <td>
+                            {{ address.state }}
+                        </td>
+
+                        <td>
+                            {{ address.pincode }}
+                        </td>
+
+                        <td>
+                            {% if address.is_default %}
+                                <span class="badge bg-success">
+                                    Yes
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    No
+                                </span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="10" class="text-center">
+                            No addresses available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

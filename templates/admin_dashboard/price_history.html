@@ -1,0 +1,157 @@
+{% extends 'admin_dashboard/admin_base.html' %}
+
+{% block title %}
+Price History
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+   <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>Price History</h2>
+        <p class="text-muted mb-0">
+            Regular product price changes. Offer and restored-price events are listed under Offers.
+        </p>
+    </div>
+
+    <a href="{% url 'add_price_history' %}"
+       class="btn btn-dark">
+        + Add Price
+    </a>
+
+</div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            {% if price_history %}
+
+            {% include 'admin_dashboard/includes/table_controls.html' %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle price-history-table" id="priceHistoryTable">
+
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Variant</th>
+                            <th>Price</th>
+                            <th>Price Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in price_history %}
+
+                        <tr data-search="{{ item.variant.product.name }} {{ item.variant.color }} {{ item.variant.size }} {{ item.get_price_type_display }} {{ item.price }}"
+                            data-product="{{ item.variant.product.name|lower }}"
+                            data-start="{{ item.start_date|date:'U' }}"
+                            data-price="{{ item.price }}"
+                            data-type="{{ item.get_price_type_display|lower }}">
+
+                            <td class="price-history-product">
+                                <strong>{{ item.variant.product.name }}</strong>
+                            </td>
+
+                            <td>
+                                {% if item.variant.color %}
+                                    {{ item.variant.color }}
+                                {% endif %}
+
+                                {% if item.variant.size %}
+                                    / {{ item.variant.size }}
+                                {% endif %}
+                                {% if not item.variant.color and not item.variant.size %}
+                                    <span class="text-muted">Standard</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="price-history-amount">
+                                <strong>₹{{ item.price }}</strong>
+                            </td>
+
+                            <td>
+                                <span class="price-type-badge price-type-{{ item.price_type }}">
+                                    {{ item.get_price_type_display }}
+                                </span>
+                            </td>
+
+                            <td class="price-history-date">
+                                {{ item.start_date|date:"d M Y, h:i A" }}
+                            </td>
+
+                            <td class="price-history-date">
+                                {% if item.end_date %}
+                                    {{ item.end_date|date:"d M Y, h:i A" }}
+                                {% else %}
+                                    <span class="text-muted">No end date</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="price-history-date text-muted">
+                                {{ item.created_at|date:"d M Y, h:i A" }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% include 'admin_dashboard/includes/table_pagination.html' %}
+
+            {% else %}
+
+            <div class="text-center py-5">
+
+                <h5>No Price History Found</h5>
+
+                <p class="text-muted">
+                    Price history will appear here when product prices are recorded.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .price-history-table thead th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        background: #f3f5f2;
+        color: #646d67;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .price-history-table td { padding-top: 14px; padding-bottom: 14px; }
+    .price-history-product { min-width: 170px; }
+    .price-history-amount { color: #29312e; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .price-history-date { min-width: 145px; white-space: nowrap; }
+    .price-type-badge { display: inline-block; padding: 5px 8px; font-size: 10px; font-weight: 600; }
+    .price-type-original { background: #edf1e8; color: #566b3e; }
+    .price-type-offer { background: #f8e9e8; color: #9b3438; }
+    .price-type-updated { background: #eaf0f5; color: #3e627c; }
+    .price-type-after_offer { background: #eaf2ec; color: #376348; }
+</style>
+
+{% endblock %}

@@ -1,0 +1,654 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ product.name }} - VASTRAM
+{% endblock %}
+
+{% block content %}
+
+<div class="product-detail-page">
+
+    <div class="product-detail">
+
+        
+     <div class="product-gallery">
+
+    <div class="product-main-image">
+
+        {% if product.detail_images %}
+
+            <img id="mainProductImage"
+                src="{{ product.detail_images.0 }}"
+                alt="{{ product.name }}"
+                onclick="openImageViewer(this.src)">
+
+        {% else %}
+
+            <div class="no-detail-image">
+                No Image Available
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    {% if product.detail_images %}
+
+    <div class="product-thumbnails">
+
+        {% for image_url in product.detail_images %}
+
+            <img src="{{ image_url }}"
+                 alt="{{ product.name }}"
+                 class="product-thumbnail"
+                 onclick="changeProductImage('{{ image_url }}')">
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+    <div class="product-thumbnails">
+
+        {% for variant in product.variants.all %}
+
+            {% for product_image in variant.images.all %}
+
+                <img src="{{ product_image.image.url }}"
+                     alt="{{ product.name }}"
+                     class="product-thumbnail"
+                     onclick="changeProductImage('{{ product_image.image.url }}')">
+
+            {% endfor %}
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+        
+        <div class="product-detail-info">
+
+            <p class="detail-category">
+                {{ product.category.name }}
+            </p>
+
+            <h1>
+                {{ product.name }}
+            </h1>
+
+            <div class="detail-line"></div>
+
+            <p class="detail-description">
+                {{ product.description }}
+            </p>
+
+
+            {% if product.fabric %}
+            <div class="detail-item">
+                <span>Fabric</span>
+                <strong>{{ product.fabric }}</strong>
+            </div>
+            {% endif %}
+
+
+            <div class="variant-section">
+
+    <h3>Available Options</h3>
+
+    {% for variant in product.variants.all %}
+
+    <div class="variant-box">
+
+        <div>
+            <span class="variant-label">Color</span>
+
+            <strong>
+                {{ variant.color }}
+            </strong>
+        </div>
+
+
+        <div>
+            <span class="variant-label">Size</span>
+
+            <strong>
+                {{ variant.size }}
+            </strong>
+        </div>
+
+
+        <div>
+            <span class="variant-label">Price</span>
+
+            {% if variant.active_offer %}
+
+                <strong class="offer-price">
+                    ₹{{ variant.active_offer.offer_price }}
+                </strong>
+
+                <span class="original-price">
+                    ₹{{ variant.price }}
+                </span>
+
+                <span class="offer-label">
+                    OFFER
+                </span>
+
+            {% else %}
+
+                <strong>
+                    ₹{{ variant.price }}
+                </strong>
+
+            {% endif %}
+
+        </div>
+
+
+        <div>
+            <span class="variant-label">Stock</span>
+
+            {% if variant.stock > 0 %}
+
+                <strong class="in-stock">
+                    Available
+                </strong>
+
+
+                <button
+                    type="button"
+                    class="select-variant-btn"
+                    onclick="addVariantToCart({{ variant.id }})">
+                    ADD TO CART
+                </button>
+
+            {% else %}
+
+                <strong class="out-stock">
+                    Out of Stock
+                </strong>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+        <p>No variants available.</p>
+
+    {% endfor %}
+
+</div>
+
+
+            <div class="detail-actions">
+
+                <a href="{% url 'cart' %}" class="cart-btn">
+                    GO TO CART
+                </a>
+
+                <a href="{% url 'product_list' %}" class="back-btn">
+                    CONTINUE SHOPPING
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="imageViewer" class="image-viewer">
+
+    <span class="close-viewer" onclick="closeImageViewer()">&times;</span>
+
+    <div class="zoom-container">
+        <img id="viewerImage" alt="{{ product.name }}">
+    </div>
+
+</div>
+
+<style>
+
+    .product-detail-page {
+        max-width: 1200px;
+        margin: auto;
+        padding: 60px 30px 80px;
+    }
+
+
+    .product-detail {
+        display: grid;
+        grid-template-columns: 55% 45%;
+        gap: 60px;
+        align-items: start;
+    }
+
+
+
+.product-gallery {
+    width: 100%;
+}
+
+.product-main-image {
+    width: 100%;
+    height: 650px;
+    background-color: #f7f7f7;
+    overflow: hidden;
+}
+
+.product-main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.product-thumbnails {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    overflow-x: auto;
+}
+
+.product-thumbnail {
+    width: 85px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 1px solid #eeeeee;
+    padding: 2px;
+    background-color: #f7f7f7;
+    transition: 0.2s;
+}
+
+.product-thumbnail:hover {
+    border-color: #222;
+}
+
+.no-detail-image {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+
+
+    .product-detail-info {
+        padding-top: 20px;
+    }
+
+    .detail-category {
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #888;
+    }
+
+    .product-detail-info h1 {
+        font-size: 38px;
+        font-weight: 500;
+        margin: 12px 0 20px;
+        color: #222;
+    }
+
+    .detail-line {
+        width: 50px;
+        height: 1px;
+        background-color: #222;
+        margin-bottom: 25px;
+    }
+
+    .detail-description {
+        color: #666;
+        line-height: 1.8;
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+
+
+
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #eeeeee;
+        border-bottom: 1px solid #eeeeee;
+        padding: 15px 0;
+        margin-bottom: 30px;
+    }
+
+    .detail-item span {
+        color: #777;
+    }
+
+
+
+    .variant-section h3 {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    .variant-box {
+        border: 1px solid #eeeeee;
+        padding: 18px;
+        margin-bottom: 12px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .variant-box div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .variant-label {
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .variant-box strong {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .offer-price {
+    color: #a44;
+    font-size: 16px !important;
+}
+
+.original-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 12px;
+}
+
+.offer-label {
+    font-size: 10px;
+    color: #a44;
+    letter-spacing: 1px;
+    margin-top: 3px;
+}
+
+
+    .in-stock {
+        color: #557a55;
+    }
+
+    .out-stock {
+        color: #a44;
+    }
+
+
+
+    .detail-actions {
+        margin-top: 30px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .cart-btn,
+    .back-btn {
+        padding: 13px 22px;
+        text-decoration: none;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+
+    .cart-btn {
+        background-color: #222;
+        color: white;
+    }
+
+    .back-btn {
+        border: 1px solid #222;
+        color: #222;
+    }
+
+    .back-btn:hover {
+        background-color: #222;
+        color: white;
+    }
+
+
+    .image-viewer {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 30px;
+        background: rgba(0, 0, 0, 0.92);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .zoom-container {
+        width: 90%;
+        height: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .image-viewer img {
+        max-width: 95%;
+        max-height: 95%;
+        object-fit: contain;
+    }
+
+    .close-viewer {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        cursor: pointer;
+        z-index: 10000;
+    }
+
+
+
+    @media (max-width: 768px) {
+
+        .product-detail {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .product-main-image {
+            height: 500px;
+        }
+
+        .product-detail-info h1 {
+            font-size: 30px;
+        }
+
+        .variant-box {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+
+        .select-variant-btn {
+    margin-top: 8px;
+    padding: 7px 14px;
+    border: 1px solid #222;
+    background-color: white;
+    color: #222;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.select-variant-btn:hover {
+    background-color: #222;
+    color: white;
+}
+
+    }
+
+
+    </style>
+
+<script>
+
+function changeProductImage(imageUrl) {
+
+    const mainImage = document.getElementById("mainProductImage");
+
+    if (mainImage) {
+        mainImage.src = imageUrl;
+    }
+
+}
+
+
+function addVariantToCart(variantId) {
+
+    const productId = "{{ product.id }}";
+
+    window.location.href =
+        "/cart/add/" + productId + "/?variant=" + variantId;
+
+}
+
+
+let zoomLevel = 1;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let currentX = 0;
+let currentY = 0;
+
+
+function openImageViewer(imageUrl) {
+
+    const viewer = document.getElementById("imageViewer");
+    const image = document.getElementById("viewerImage");
+
+    image.src = imageUrl;
+
+    zoomLevel = 1;
+    currentX = 0;
+    currentY = 0;
+
+    image.style.transform =
+        "translate(0px, 0px) scale(1)";
+
+    viewer.style.display = "flex";
+}
+
+
+function closeImageViewer() {
+
+    document.getElementById("imageViewer").style.display = "none";
+    document.getElementById("viewerImage").removeAttribute("src");
+
+}
+
+
+const viewerImage = document.getElementById("viewerImage");
+
+
+viewerImage.addEventListener("wheel", function(event) {
+
+    event.preventDefault();
+
+    if (event.deltaY < 0) {
+
+        zoomLevel += 0.2;
+
+    } else {
+
+        zoomLevel -= 0.2;
+
+    }
+
+    if (zoomLevel < 1) {
+        zoomLevel = 1;
+    }
+
+    if (zoomLevel > 4) {
+        zoomLevel = 4;
+    }
+
+    viewerImage.style.transform =
+        `translate(${currentX}px, ${currentY}px) scale(${zoomLevel})`;
+
+});
+
+
+viewerImage.addEventListener("mousedown", function(event) {
+
+    if (zoomLevel <= 1) {
+        return;
+    }
+
+    isDragging = true;
+
+    startX = event.clientX - currentX;
+    startY = event.clientY - currentY;
+
+    viewerImage.style.cursor = "grabbing";
+
+});
+
+
+viewerImage.addEventListener("mousemove", function(event) {
+
+    if (!isDragging) {
+        return;
+    }
+
+    currentX = event.clientX - startX;
+    currentY = event.clientY - startY;
+
+    viewerImage.style.transform =
+        `translate(${currentX}px, ${currentY}px) scale(${zoomLevel})`;
+
+});
+
+
+viewerImage.addEventListener("mouseup", function() {
+
+    isDragging = false;
+
+    viewerImage.style.cursor = "zoom-in";
+
+});
+
+
+viewerImage.addEventListener("mouseleave", function() {
+
+    isDragging = false;
+
+    viewerImage.style.cursor = "zoom-in";
+
+});
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,657 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Checkout - VASTRAM
+{% endblock %}
+
+{% block content %}
+
+<div class="checkout-page">
+
+    <div class="checkout-heading">
+        <p>VASTRAM</p>
+        <h1>Checkout</h1>
+    </div>
+
+    {% if messages %}
+        <div class="checkout-messages" aria-live="polite">
+            {% for message in messages %}
+                <p role="alert">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+<form method="POST" action="{% url 'place_order' %}">
+    {% csrf_token %}
+
+
+    <div class="checkout-layout">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="checkout-left">
+
+            <!-- Delivery Address -->
+
+            <div class="checkout-section">
+
+                <div class="section-title">
+                    <span>01</span>
+                    <h2>Delivery Address</h2>
+                </div>
+
+                <div class="address-box">
+
+    {% if addresses %}
+
+        {% for address in addresses %}
+
+            <label class="address-card">
+
+                <input type="radio"
+                       name="selected_address"
+                       value="{{ address.id }}"
+                       {% if address.is_default %}checked{% endif %}>
+
+                <div class="address-details">
+
+                    <div class="address-top">
+
+                        <h3>
+                            {{ address.address_type|default:"Delivery Address" }}
+                        </h3>
+
+                        {% if address.is_default %}
+                            <span class="default-address">
+                                DEFAULT
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <p>
+                        <strong>{{ address.full_name }}</strong>
+                    </p>
+
+                    <p>
+                        {{ address.phone }}
+                    </p>
+
+                    <p>
+                        {{ address.address }}
+                    </p>
+
+                    <p>
+                        {{ address.city }},
+                        {{ address.state }} -
+                        {{ address.pincode }}
+                    </p>
+
+                </div>
+
+            </label>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>
+            You don't have any saved delivery address.
+        </p>
+
+    {% endif %}
+
+
+    <a href="{% url 'add_address' %}"
+       class="address-btn">
+
+        ADD NEW ADDRESS
+
+    </a>
+
+</div>
+
+            </div>
+
+
+            <!-- Order Items -->
+
+            <div class="checkout-section">
+
+                <div class="section-title">
+                    <span>02</span>
+                    <h2>Your Order</h2>
+                </div>
+
+
+                {% for item in cart_items %}
+
+                <div class="checkout-item">
+
+
+                    <!-- Image -->
+
+                    <div class="checkout-image">
+
+                        {% if item.product.image %}
+
+                            <img src="{{ item.product.image.url }}"
+                                 alt="{{ item.product.name }}">
+
+                        {% else %}
+
+                            <div class="no-image">
+                                No Image
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Details -->
+
+                    <div class="checkout-item-info">
+
+                        <p class="checkout-category">
+                            {{ item.product.category.name }}
+                        </p>
+
+                        <h3>
+                            {{ item.product.name }}
+                        </h3>
+
+
+                        {% if item.variant %}
+
+                            {% if item.variant.color %}
+                            <p>
+                                <strong>Color:</strong>
+                                {{ item.variant.color }}
+                            </p>
+                            {% endif %}
+
+                            {% if item.selected_size or item.variant.size %}
+                            <p>
+                                <strong>Size:</strong>
+                                {% firstof item.selected_size item.variant.size %}
+                            </p>
+                            {% endif %}
+
+                        {% endif %}
+
+
+                        <p>
+                            <strong>Quantity:</strong>
+                            {{ item.quantity }}
+                        </p>
+
+
+                        <p class="checkout-price">
+
+                            ₹{{ item.unit_price }}
+
+                        </p>
+
+
+                        <p class="checkout-item-total">
+
+                            Item Total:
+                            <strong>
+                                ₹{{ item.item_total }}
+                            </strong>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="checkout-summary">
+
+            <h2>Order Summary</h2>
+
+
+            <div class="summary-row">
+
+                <span>Items</span>
+
+                <span>
+                    {{ cart_items|length }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>Subtotal</span>
+
+                <strong>
+                    ₹{{ total }}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>Delivery</span>
+
+                <span>
+                    Calculated at checkout
+                </span>
+
+            </div>
+
+
+            <hr>
+
+
+            <div class="summary-total">
+
+                <span>Total</span>
+
+                <strong>
+                    ₹{{ total }}
+                </strong>
+
+            </div>
+
+
+            <!-- PLACE ORDER -->
+
+           <!-- PLACE ORDER -->
+
+
+    <button type="submit"
+        class="place-order-btn">
+
+    PLACE ORDER
+
+</button>
+
+            <a href="{% url 'cart' %}"
+               class="back-cart-btn">
+
+                BACK TO CART
+
+            </a>
+
+               </div>
+    </div>
+
+</form>
+
+</div>
+
+
+<style>
+
+.checkout-page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 55px 30px 80px;
+}
+
+
+/* Heading */
+
+.checkout-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.checkout-heading p {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.checkout-heading h1 {
+    font-size: 38px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.checkout-messages p {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border-left: 3px solid #9b3438;
+    background: #fbefee;
+    color: #7e292d;
+    font-size: 13px;
+}
+
+
+/* Layout */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 50px;
+    align-items: start;
+}
+
+
+/* Sections */
+
+.checkout-section {
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 35px;
+    margin-bottom: 35px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.section-title span {
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.section-title h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0;
+}
+
+
+/* Address */
+
+.address-box {
+    border: 1px solid #eeeeee;
+    padding: 25px;
+}
+
+.address-box p {
+    color: #777;
+    font-size: 14px;
+    margin-top: 0;
+}
+
+.address-btn {
+    display: inline-block;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    padding: 12px 18px;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.address-btn:hover {
+    background: #444;
+}
+
+/* Saved Address */
+
+.address-card {
+    display: flex;
+    gap: 15px;
+    border: 1px solid #eeeeee;
+    padding: 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.address-card:hover {
+    border-color: #999;
+}
+
+.address-card input {
+    margin-top: 5px;
+}
+
+.address-details {
+    flex: 1;
+}
+
+.address-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.address-top h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 12px;
+}
+
+.address-details p {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.address-details strong {
+    color: #222;
+}
+
+.default-address {
+    font-size: 9px;
+    letter-spacing: 1px;
+    border: 1px solid #222;
+    padding: 4px 7px;
+}
+
+
+/* Checkout Item */
+
+.checkout-item {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 25px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.checkout-item:first-of-type {
+    padding-top: 0;
+}
+
+
+/* Image */
+
+.checkout-image {
+    width: 130px;
+    height: 160px;
+    background: #f7f7f7;
+    overflow: hidden;
+}
+
+.checkout-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+
+/* Details */
+
+.checkout-category {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 7px;
+}
+
+.checkout-item-info h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 0 12px;
+}
+
+.checkout-item-info p {
+    font-size: 13px;
+    color: #666;
+    margin: 6px 0;
+}
+
+.checkout-item-info strong {
+    color: #222;
+}
+
+.checkout-price {
+    font-size: 16px !important;
+    color: #222 !important;
+    margin-top: 15px !important;
+}
+
+.checkout-item-total {
+    margin-top: 15px !important;
+}
+
+
+/* Summary */
+
+.checkout-summary {
+    border: 1px solid #eeeeee;
+    padding: 30px;
+    position: sticky;
+    top: 20px;
+}
+
+.checkout-summary h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 18px;
+}
+
+.summary-row strong {
+    color: #222;
+}
+
+.summary-row span:last-child {
+    text-align: right;
+}
+
+.checkout-summary hr {
+    border: none;
+    border-top: 1px solid #eeeeee;
+    margin: 25px 0;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+
+/* Place Order */
+
+.place-order-btn {
+    width: 100%;
+    border: none;
+    background: #222;
+    color: white;
+    padding: 15px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.place-order-btn:hover {
+    background: #444;
+}
+
+
+/* Back */
+
+.back-cart-btn {
+    display: block;
+    text-align: center;
+    border: 1px solid #222;
+    color: #222;
+    text-decoration: none;
+    padding: 13px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 12px;
+}
+
+.back-cart-btn:hover {
+    background: #222;
+    color: white;
+}
+
+
+/* Mobile */
+
+@media (max-width: 800px) {
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-summary {
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .checkout-page {
+        padding: 40px 20px;
+    }
+
+    .checkout-item {
+        grid-template-columns: 90px 1fr;
+        gap: 15px;
+    }
+
+    .checkout-image {
+        width: 90px;
+        height: 120px;
+    }
+
+    .checkout-item-info h3 {
+        font-size: 17px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

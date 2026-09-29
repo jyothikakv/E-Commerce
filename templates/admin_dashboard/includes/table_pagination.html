@@ -1,0 +1,22 @@
+<nav class="admin-table-pagination" aria-label="Table pages">
+    <span class="admin-table-page-info">
+        {% if page_obj.paginator.count %}
+            Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} records
+        {% else %}
+            No records found
+        {% endif %}
+    </span>
+    <div class="admin-table-pagination-actions">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-sm btn-outline-secondary" href="?q={{ table_search|urlencode }}&amp;sort={{ table_sort|urlencode }}&amp;direction={{ table_direction }}&amp;per_page={{ table_page_size }}{% for key, value in table_extra_query_params.items %}&amp;{{ key|urlencode }}={{ value|urlencode }}{% endfor %}&amp;page={{ page_obj.previous_page_number }}">Previous</a>
+        {% else %}
+            <span class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Previous</span>
+        {% endif %}
+        <span class="admin-table-page-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages|default:1 }}</span>
+        {% if page_obj.has_next %}
+            <a class="btn btn-sm btn-outline-secondary" href="?q={{ table_search|urlencode }}&amp;sort={{ table_sort|urlencode }}&amp;direction={{ table_direction }}&amp;per_page={{ table_page_size }}{% for key, value in table_extra_query_params.items %}&amp;{{ key|urlencode }}={{ value|urlencode }}{% endfor %}&amp;page={{ page_obj.next_page_number }}">Next</a>
+        {% else %}
+            <span class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Next</span>
+        {% endif %}
+    </div>
+</nav>

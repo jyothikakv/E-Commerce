@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Wishlist
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">My Wishlist</h2>
+
+    {% if items %}
+
+        <div class="row">
+
+            {% for item in items %}
+
+                <div class="col-md-4 mb-4">
+
+                    <div class="card h-100">
+
+                        {% if item.product.variants.first.images.first %}
+    <img src="{{ item.product.variants.first.images.first.image.url }}"
+         class="card-img-top"
+         style="height: 300px; object-fit: contain;">
+{% elif item.product.image %}
+    <img src="{{ item.product.image.url }}"
+         class="card-img-top"
+         style="height: 300px; object-fit: contain;">
+{% else %}
+    <div class="text-center p-5">
+        No Image
+    </div>
+{% endif %}
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                {{ item.product.name }}
+                            </h5>
+
+                            <a href="{% url 'product_detail' item.product.slug %}"
+                               class="btn btn-dark">
+                                View Product
+                            </a>
+
+                            <a href="{% url 'remove_from_wishlist' item.product.id %}"
+                               class="btn btn-danger">
+                                Remove
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="text-center mt-5">
+
+            <h4>Your wishlist is empty</h4>
+
+            <p class="text-muted">
+                Add your favourite dresses to your wishlist.
+            </p>
+
+            <a href="{% url 'product_list' %}"
+               class="btn btn-dark">
+                Continue Shopping
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
